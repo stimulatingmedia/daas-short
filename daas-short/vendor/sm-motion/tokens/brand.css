@@ -1,0 +1,124 @@
+/* Stimulating Media — Brand foundation (colors + type)
+   Mirrors the canonical Stimulating Media design system tokens so the
+   motion system can be dropped into any page standalone.
+   Source of truth for these values: the SMedia Brand Style Guide. */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Caveat:wght@500;600;700&display=swap');
+
+:root {
+  /* ---- Core ---- */
+  --color-deep-space-blue: #063141;
+  --color-stimulating-green: #C4D600;
+  --color-platinum-ice: #DDE6F0;
+
+  /* ---- Accent ---- */
+  --color-royal-dark-ube: #922DB1;
+  --color-cosmic-orange: #F0AB00;
+  --color-nebula-blue: #72DBFA;
+
+  /* ---- Neutral ---- */
+  --color-space-gray: #3F4444;
+  --color-galaxy-white: #F8F8F3;
+  --color-cream: #F3E7D3; /* headings on dark surfaces */
+
+  /* ---- Tints (lighter as the number drops) ---- */
+  --color-deep-space-blue-90: #1f4654;
+  --color-deep-space-blue-80: #385a67;
+  --color-deep-space-blue-65: #5b7882;
+  --color-deep-space-blue-50: #83989f;
+  --color-stimulating-green-90: #cadb1a;
+  --color-stimulating-green-80: #d0df33;
+  --color-stimulating-green-65: #d9e559;
+  --color-stimulating-green-50: #e1ea80;
+  --color-royal-dark-ube-90: #9d42ba;
+  --color-royal-dark-ube-80: #a857c1;
+  --color-royal-dark-ube-65: #bd7ed0;
+  --color-royal-dark-ube-50: #c896d8;
+  --color-cosmic-orange-90: #f1b31a;
+  --color-cosmic-orange-80: #f3bc33;
+  --color-cosmic-orange-65: #f5cb59;
+  --color-cosmic-orange-50: #f7d580;
+  --color-nebula-blue-90: #80dffb;
+  --color-nebula-blue-80: #8ee3fb;
+  --color-nebula-blue-65: #a7eafc;
+  --color-nebula-blue-50: #b8effd;
+  --color-space-gray-90: #525757;
+  --color-space-gray-80: #656969;
+  --color-space-gray-65: #828686;
+  --color-space-gray-50: #9fa2a2;
+
+  /* ---- Semantic ---- */
+  --surface-page: var(--color-galaxy-white);
+  --surface-card: #ffffff;
+  --surface-subtle: var(--color-platinum-ice);
+  --surface-inverse: var(--color-deep-space-blue);
+  --text-heading: var(--color-deep-space-blue);
+  --text-body: var(--color-space-gray);
+  --text-muted: var(--color-space-gray-80); /* 5.3:1 on white; the 65 tint fails AA below 18px */
+  --text-on-inverse: var(--color-galaxy-white);
+  --text-heading-on-inverse: var(--color-cream);
+  --text-on-accent: var(--color-deep-space-blue);
+  --text-eyebrow: var(--color-cosmic-orange);
+  /* On light surfaces Cosmic Orange text measures under 2:1, so an eyebrow
+     there is set in Deep Space Blue with a Cosmic Orange rule before it
+     (the .eyebrow--on-light pattern in the showcase and examples). */
+  --text-eyebrow-on-light: var(--color-deep-space-blue);
+  --border-subtle: var(--color-platinum-ice);
+  --border-strong: var(--color-deep-space-blue-50);
+  --brand-primary: var(--color-deep-space-blue);
+  --brand-accent: var(--color-stimulating-green);
+  --action-primary: var(--color-royal-dark-ube);
+  --action-primary-hover: #7e259a;
+  --status-success: var(--color-stimulating-green);
+  --status-warning: var(--color-cosmic-orange);
+  --status-info: var(--color-nebula-blue);
+  --status-danger: #d64545;
+  --focus-ring: var(--color-nebula-blue);
+
+  /* ---- Type ---- */
+  --font-display: 'Montserrat', system-ui, sans-serif;
+  --font-ui: 'Montserrat', system-ui, sans-serif;
+  --font-body: 'Roboto', system-ui, sans-serif;
+  --font-accent: 'Helvetica', 'Arial', sans-serif;
+  --font-hand: 'Caveat', 'Comic Sans MS', cursive;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+  --text-display: 4.209rem;
+  --text-h1: 3.157rem;
+  --text-h2: 2.369rem;
+  --text-h3: 1.777rem;
+  --text-h4: 1.333rem;
+  --text-lg: 1.125rem;
+  --text-base: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+  --text-overline: 0.6875rem;
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-overline: 0.14em;
+
+  /* ---- Space, radii, shadows ---- */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.5rem; --space-6: 2rem; --space-7: 3rem; --space-8: 4rem;
+  --space-9: 6rem; --space-10: 8rem;
+  --radius-xs: 4px; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 18px;
+  --radius-xl: 28px; --radius-pill: 999px; --radius-circle: 50%;
+  --shadow-xs: 0 1px 2px rgba(6, 49, 65, 0.06);
+  --shadow-sm: 0 2px 8px rgba(6, 49, 65, 0.08);
+  --shadow-md: 0 8px 24px rgba(6, 49, 65, 0.10);
+  --shadow-lg: 0 18px 48px rgba(6, 49, 65, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(114, 219, 250, 0.55);
+  --shadow-accent: 0 8px 24px rgba(196, 214, 0, 0.32);
+  --shadow-action: 0 8px 24px rgba(146, 45, 177, 0.28);
+  --gradient-sky: linear-gradient(160deg, #063141 0%, #0c4456 55%, #155366 100%);
+  --gradient-launch: linear-gradient(120deg, #C4D600 0%, #d9e559 100%);
+}

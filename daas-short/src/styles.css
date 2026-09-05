@@ -1,0 +1,14 @@
+/* Base styles. The comp is authored in absolute pixels with inline styles
+   (it is a 1080 x 1920 video frame, not a responsive page). Brand tokens live
+   in vendor/sm-motion/tokens/brand.css and are mirrored in src/brand/palette.js. */
+@import '../vendor/sm-motion/tokens/motion.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+body { background: #0a0a0a; font-family: 'Montserrat', system-ui, sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+#root { position: relative; }
+img { display: block; }
+
+/* Headless render: the stage sits at (0,0) unscaled; the viewport is 1080 x 1920. */
+html.render, html.render body { background: #063141; overflow: hidden; }
+html.render #root { width: 1080px; height: 1920px; }

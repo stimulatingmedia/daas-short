@@ -1,0 +1,7 @@
+/* Self-hosted Google Fonts (latin subset, variable weight) so headless
+   renders are deterministic and offline-safe.
+   Montserrat: display + UI. Roboto: body. Caveat: hand-drawn marker asides. */
+@font-face { font-family: 'Montserrat'; font-style: normal; font-weight: 400 800; font-display: block; src: url('./montserrat.woff2') format('woff2'); }
+@font-face { font-family: 'Montserrat'; font-style: italic; font-weight: 400; font-display: block; src: url('./montserrat-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Roboto'; font-style: normal; font-weight: 400 500; font-display: block; src: url('./roboto.woff2') format('woff2'); }
+@font-face { font-family: 'Caveat'; font-style: normal; font-weight: 600 700; font-display: block; src: url('./caveat.woff2') format('woff2'); }

@@ -1,0 +1,287 @@
+/* ============================================================================
+   Stimulating Media — Motion Tokens
+   The single source of truth for timing, easing, travel and rhythm.
+   Pairs with tokens/brand.css (colors + type). Link both.
+
+   Architecture
+   ------------
+   Base values are the SHIPPING values from the LaunchPad client portal, so
+   Crisp (the product profile) needs no multipliers at all. Other surfaces
+   scale up from there via two unitless scalars set by [data-sm-motion]:
+     --sm-profile-duration   (time)
+     --sm-profile-distance   (travel)
+   Only the ARRIVAL tier scales. Micro-timings (instant/fast/base/pop/drag)
+   and micro-travel (lift/nudge) never scale: a 2px hover lift must stay 2px
+   in every profile, and a focus ring must never take 500ms.
+   ========================================================================= */
+
+:root {
+  /* ---- Profile scalars (overridden by [data-sm-motion]) ---- */
+  /* Defaults equal the Crisp profile, so a page that sets no profile behaves
+     exactly like the product UI: no ambient motion, no overshoot. */
+  --sm-profile-duration: 1;
+  --sm-profile-distance: 1;
+  --sm-profile-stagger: 1;
+  --sm-profile-ambient: 0;   /* 1 allows ambient motion (Fluid, Expressive) */
+  --sm-profile-settle: 0;    /* 1 unlocks overshoot on sanctioned elements */
+  /* Default entrance curve. glide is the shipping portal fadeUp curve;
+     launch is for sub-360ms state changes and is reached through the
+     --sm-motion-hover / -press / -pop shorthands, never as a profile default. */
+  --sm-profile-default-ease: var(--sm-ease-glide);
+
+  /* ==========================================================
+     EASING — 9 curves. Each has one job. Do not add a tenth.
+     ========================================================== */
+
+  /* Default for UI entrances and state changes under 360ms.
+     Decisive ease-out: 88% of the travel is done by 35% of the time. */
+  --sm-ease-launch: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Longer content entrances (>=360ms), stagger sets, progress and ring
+     fills. This is the curve already shipping in the portal (fadeUp). */
+  --sm-ease-glide: cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  /* In-place property changes with no travel: color, background, border,
+     opacity-only fades, backdrop blur, reflow. */
+  --sm-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Exits. Accelerates away — the element leaves under thrust.
+     Exit duration = 0.6x the matching entrance. Exits travel UP, like
+     entrances; nothing in this system falls back down. */
+  --sm-ease-exit: cubic-bezier(0.5, 0, 0.85, 0.15);
+
+  /* Full-frame crossings only: cloud page wipe, drawer, deck divider.
+     Never a profile default and never on an entrance. */
+  --sm-ease-thrust: cubic-bezier(0.7, 0, 0.2, 1);
+
+  /* Stroke draw-on (stroke-dashoffset / AE Trim Paths). Starts at 9% speed
+     like a pen touching down, finishes with the wrist lifting away. */
+  --sm-ease-draw: cubic-bezier(0.55, 0.05, 0.25, 1);
+
+  /* Single ~4.4% overshoot, one cycle. Sanctioned ONLY on kanban card drop
+     and on the mark/collage in Expressive. Never on running text. */
+  --sm-ease-settle: cubic-bezier(0.2, 0.7, 0.3, 1.2);
+
+  /* ~10% overshoot. Expressive profile only: the playful, springy landing
+     for social video, hero marks and collage props. Never in product UI,
+     never on body copy, never on anything a user is reading. */
+  --sm-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Status loops and anything that must not accelerate. */
+  --sm-ease-linear: linear;
+
+  /* ==========================================================
+     DURATION — an 11-rung ladder, every rung on the 30fps grid.
+     Frames shown at 30fps. Anything off this ladder is a bug.
+     ========================================================== */
+  --sm-duration-instant: 0ms;     /*  0f — focus rings, state flips, reduced-motion */
+  --sm-duration-fast: 120ms;      /*  4f — press, icon swap, chip toggle */
+  --sm-duration-pop: 180ms;       /*  5f — dropdown / popover (shipping lpDropIn) */
+  --sm-duration-base: 200ms;      /*  6f — hover, tooltip, in-place color */
+  --sm-duration-drag: 260ms;      /*  8f — kanban pick-up and drop settle (shipping) */
+
+
+  /* ==========================================================
+     DISTANCE — one doubling ladder. Vertical unless stated.
+     Positive numbers are travel amounts; the sign lives in the keyframe.
+     ========================================================== */
+  --sm-distance-lift: 2px;   /* hover lift on buttons and cards — never scales */
+  --sm-distance-nudge: 4px;  /* icon nudge, tooltip offset — never scales */
+
+
+  /* ==========================================================
+     SCALE — unitless. Kept out of the px ladder on purpose.
+     ========================================================== */
+  --sm-scale-press: 0.98;    /* button press */
+  --sm-scale-from: 0.96;     /* modal / popover origin scale */
+  --sm-scale-drag: 1.04;     /* kanban card while held: it grows */
+  --sm-scale-settle: 1.04;   /* the single overshoot peak, Expressive only */
+
+  /* ==========================================================
+     STAGGER — one cadence per screen. Hard cap 400ms total.
+     ========================================================== */
+
+  /* ==========================================================
+     DEPTH — parallax and layered perspective.
+     Depth is a POSITION offset, never a wobble. Layers move at
+     different rates on the same scroll or pointer input.
+     ========================================================== */
+  --sm-perspective: 1200px;
+  --sm-depth-back: 0.25;   /* backdrop clouds, world map */
+  --sm-depth-mid: 0.5;     /* sparkle field, collage props */
+  --sm-depth-front: 0.85;  /* cut-out subject, foreground card */
+  --sm-depth-max: 24px;    /* hard cap on parallax travel — vestibular safety */
+  --sm-tilt-max: 6deg;     /* hard cap on pointer tilt */
+
+  /* Depth Field compositions (floating UI, props in a sky). Far layers are
+     larger, softer and dimmer; blur is a depth cue on far layers only and
+     never touches text a person is reading. Product UI (Crisp) never blurs. */
+  --sm-blur-back: 0px;
+  --sm-blur-mid: 0px;
+  --sm-depth-scale-back: 1.12;
+  --sm-depth-scale-mid: 1.04;
+  --sm-depth-tilt: 0deg;   /* static composition pose, not a wobble */
+  --sm-drift: 12px;        /* ambient bob amplitude for floating items */
+
+  /* Glass surfaces (frosted cards over imagery) */
+  --sm-glass-blur: 16px;
+  --sm-glass-alpha: 0.62;
+
+  /* ==========================================================
+     SPRINGS — for Framer Motion / motion.dev / Figma / Rive.
+     Damping ratios verified; overshoot noted in the docs.
+     ========================================================== */
+  --sm-spring-ui-stiffness: 500;    --sm-spring-ui-damping: 45;    --sm-spring-ui-mass: 1;    /* ratio 1.01, no overshoot */
+  --sm-spring-glide-stiffness: 300; --sm-spring-glide-damping: 30; --sm-spring-glide-mass: 1; /* ratio 0.87, 0.4% */
+  --sm-spring-drag-stiffness: 400;  --sm-spring-drag-damping: 32;  --sm-spring-drag-mass: 0.8;/* ratio 0.89, 0.2% */
+  --sm-spring-hero-stiffness: 170;  --sm-spring-hero-damping: 26;  --sm-spring-hero-mass: 1.2;/* ratio 0.91, 0.1% */
+  --sm-spring-settle-stiffness: 340;--sm-spring-settle-damping: 26;--sm-spring-settle-mass: 1;/* ratio 0.70, 4.4% */
+  --sm-spring-pop-stiffness: 300;   --sm-spring-pop-damping: 21;   --sm-spring-pop-mass: 1;   /* ratio 0.61, 9.1% */
+
+  /* ==========================================================
+     COMPOSITE SHORTHANDS — reach for these before hand-rolling.
+     ========================================================== */
+  --sm-motion-enter: var(--sm-duration-enter) var(--sm-ease-glide);
+  --sm-motion-exit: var(--sm-duration-exit) var(--sm-ease-exit);
+  --sm-motion-hover: var(--sm-duration-base) var(--sm-ease-launch);
+  --sm-motion-press: var(--sm-duration-fast) var(--sm-ease-launch);
+  --sm-motion-pop: var(--sm-duration-pop) var(--sm-ease-glide);
+  --sm-motion-fill: var(--sm-duration-fill) var(--sm-ease-glide);
+  --sm-motion-reveal: var(--sm-duration-reveal) var(--sm-ease-glide);
+  --sm-motion-color: var(--sm-duration-base) var(--sm-ease-standard);
+}
+
+
+/* ============================================================================
+   PROFILE-SCALED TOKENS
+   Declared on :root AND on every [data-sm-motion] element, so a profile set
+   on a subtree recomputes these from that subtree's own scalars. (A custom
+   property computed on :root would otherwise be inherited as a finished
+   value and ignore the subtree's scalars.) The Still block and the
+   reduced-motion block come later and pin their own values.
+   ========================================================================= */
+:root,
+[data-sm-motion] {
+  /* ---- Arrival tier durations ---- */
+  --sm-duration-slow: calc(360ms * var(--sm-profile-duration));   /* 11f — modal, sheet, tab panel */
+  --sm-duration-enter: calc(420ms * var(--sm-profile-duration));  /* 13f — Launch Rise (shipping fadeUp) */
+  --sm-duration-fill: calc(600ms * var(--sm-profile-duration));   /* 18f — progress, marker draw-on */
+  --sm-duration-reveal: calc(800ms * var(--sm-profile-duration)); /* 24f — cloud band, stat ring */
+  --sm-duration-count: calc(1200ms * var(--sm-profile-duration)); /* 36f — counters, sting core */
+  --sm-duration-ambient: calc(8000ms / max(var(--sm-profile-ambient), 0.001)); /* decorative floor */
+
+  /* Exit durations. Rule: 0.6x the entrance, snapped to the ladder. */
+  --sm-duration-exit: calc(var(--sm-duration-enter) * 0.6);       /* 420 -> 252ms */
+  --sm-duration-exit-fast: calc(var(--sm-duration-base) * 0.6);   /* 200 -> 120ms */
+
+  /* ---- Arrival tier distances ---- */
+  --sm-distance-rise-sm: calc(8px * var(--sm-profile-distance));  /* exits, dropdown offset, toasts */
+  --sm-distance-rise: calc(16px * var(--sm-profile-distance));    /* default Launch Rise (shipping) */
+  --sm-distance-rise-lg: calc(32px * var(--sm-profile-distance)); /* hero headline, deck build, section */
+  --sm-distance-rise-xl: calc(64px * var(--sm-profile-distance)); /* video hero words, sting travel */
+
+  /* ---- Stagger cadence ---- */
+  --sm-stagger-tight: calc(30ms * var(--sm-profile-stagger));  /* table rows, list items */
+  --sm-stagger-base: calc(50ms * var(--sm-profile-stagger));   /* card grids, kanban columns */
+  --sm-stagger-wide: calc(80ms * var(--sm-profile-stagger));   /* hero cadence, deck builds */
+  --sm-stagger-cap: 400ms;
+  --sm-i: 0; /* per-item index, set inline or by sm-motion.js */
+  --sm-stagger-delay: min(calc(var(--sm-i) * var(--sm-stagger-base)), var(--sm-stagger-cap));
+}
+
+/* ============================================================================
+   PROFILES
+   Crisp is the base. Everything else is a scalar change, never a rewrite.
+   Set on <html> or any subtree: <html data-sm-motion="fluid">
+   ========================================================================= */
+
+/* Crisp — product UI. Dense, brisk, precise. The LaunchPad portal lives here.
+   This is the default; the block is written out so it can be re-applied to a
+   subtree inside a page running another profile. */
+[data-sm-motion="crisp"] {
+  --sm-profile-duration: 1;
+  --sm-profile-distance: 1;
+  --sm-profile-stagger: 1;
+  --sm-profile-ambient: 0;   /* no ambient motion in the product */
+  --sm-profile-settle: 0;    /* kanban drop opts in explicitly; nothing else */
+  --sm-profile-default-ease: var(--sm-ease-glide);
+  --sm-blur-back: 0px;
+  --sm-blur-mid: 0px;
+  --sm-depth-tilt: 0deg;
+}
+
+/* Fluid — marketing site and slide decks. More air, more travel, ambient on. */
+[data-sm-motion="fluid"] {
+  --sm-profile-duration: 1.2;
+  --sm-profile-distance: 1.5;
+  --sm-profile-stagger: 1;
+  --sm-profile-ambient: 1;
+  --sm-profile-settle: 0;
+  --sm-profile-default-ease: var(--sm-ease-glide);
+  --sm-blur-back: 6px;
+  --sm-blur-mid: 0px;
+  --sm-depth-tilt: 6deg;
+}
+
+/* Expressive — social video, hero moments, brand film. Big travel, barely
+   longer, playful landings. This is the profile to dial when matching an
+   external motion reference. Overshoot is unlocked here and only here. */
+[data-sm-motion="expressive"] {
+  --sm-profile-duration: 1.3;
+  --sm-profile-distance: 2.5;
+  --sm-profile-stagger: 1;
+  --sm-profile-ambient: 1;
+  --sm-profile-settle: 1;
+  --sm-profile-default-ease: var(--sm-ease-glide);
+  --sm-blur-back: 10px;
+  --sm-blur-mid: 3px;
+  --sm-depth-tilt: 12deg;
+}
+
+/* Still — a designed profile, not a fallback. Travel goes to zero, timings
+   collapse toward 200ms, ambient freezes at its resting frame, draw-ons
+   become fades, counters snap to their final value. Color and focus states
+   are untouched: reduced motion is not reduced feedback. */
+[data-sm-motion="still"] {
+  --sm-profile-duration: 0.5;
+  --sm-profile-distance: 0;
+  --sm-profile-stagger: 0;
+  --sm-profile-ambient: 0;
+  --sm-profile-settle: 0;
+  --sm-profile-default-ease: var(--sm-ease-standard);
+  --sm-duration-slow: 200ms;
+  --sm-duration-enter: 200ms;
+  --sm-duration-fill: 200ms;
+  --sm-duration-reveal: 200ms;
+  --sm-duration-count: 0ms;
+  --sm-duration-drag: 120ms;
+  --sm-depth-max: 0px;
+  --sm-tilt-max: 0deg;
+  --sm-depth-tilt: 0deg;
+  --sm-drift: 0px;
+}
+
+/* The OS switch always wins, whatever profile the page set: a person who
+   asked their system for less motion gets Still everywhere. The one escape
+   hatch is <html data-sm-force-motion>, for a user who has chosen a moving
+   profile inside the app after the app told them what it does. */
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-sm-force-motion]),
+  :root[data-sm-motion="still"] {
+    --sm-profile-duration: 0.5;
+    --sm-profile-distance: 0;
+    --sm-profile-stagger: 0;
+    --sm-profile-ambient: 0;
+    --sm-profile-settle: 0;
+    --sm-duration-slow: 200ms;
+    --sm-duration-enter: 200ms;
+    --sm-duration-fill: 200ms;
+    --sm-duration-reveal: 200ms;
+    --sm-duration-count: 0ms;
+    --sm-duration-drag: 120ms;
+    --sm-depth-max: 0px;
+    --sm-tilt-max: 0deg;
+    --sm-depth-tilt: 0deg;
+    --sm-drift: 0px;
+  }
+}

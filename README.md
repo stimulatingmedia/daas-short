@@ -1,3 +1,9 @@
+# DaaS Short — Stimulating Media
+
+> **The implementation lives in [`daas-short/`](daas-short/README.md)** — a time-driven React build on the Stimulating Media motion design system, rendered headlessly to MP4 (`npm run render`). Everything below is the original Claude Design handoff bundle it was built from.
+
+---
+
 # CODING AGENTS: READ THIS FIRST
 
 This is a **handoff bundle** from Claude Design (claude.ai/design).

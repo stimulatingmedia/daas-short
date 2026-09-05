@@ -1,0 +1,7 @@
+node_modules
+dist
+.vite
+out/*
+!out/daas-short-1080x1920.mp4
+!out/poster.png
+!out/keyframes.png

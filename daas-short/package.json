@@ -1,0 +1,25 @@
+{
+  "name": "@stimulatingmedia/daas-short",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Stimulating Media — DaaS social short (9:16, 59s). Time-driven React scene graph on the SM motion design system, rendered to MP4 headlessly.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "render": "node scripts/render.mjs",
+    "assets": "python3 scripts/optimize-assets.py",
+    "lockup": "node scripts/build-lockup.mjs",
+    "keyframes": "node scripts/keyframes.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.4.3"
+  }
+}

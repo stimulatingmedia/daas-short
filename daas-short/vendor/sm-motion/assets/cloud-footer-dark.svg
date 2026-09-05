@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="#0e4256">
+  <defs>
+    
+  </defs>
+  <polygon class="cls-1" points="800 290.8 654.77 287.84 549.05 322.59 413.29 314.61 296.64 319.63 176.06 326.5 77.26 309.97 0 293.91 0 400 800 400 800 290.8"></polygon>
+  <circle class="cls-1" cx="63.72" cy="283.7" r="25.98"></circle>
+  <path class="cls-1" d="M66.11,328.18c0-36.51-29.6-66.11-66.11-66.11v132.23c36.51,0,66.11-29.6,66.11-66.11Z"></path>
+  <path class="cls-1" d="M733.89,328.18c0,36.51,29.6,66.11,66.11,66.11v-132.23c-36.51,0-66.11,29.6-66.11,66.11Z"></path>
+  <circle class="cls-1" cx="185.81" cy="312.3" r="50.28"></circle>
+  <circle class="cls-1" cx="103.75" cy="304.68" r="40.03"></circle>
+  <circle class="cls-1" cx="141.86" cy="291.27" r="23.34" transform="translate(-63.72 40.87) rotate(-13.42)"></circle>
+  <circle class="cls-1" cx="279.64" cy="313.48" r="17.6" transform="translate(-139.76 289.55) rotate(-45)"></circle>
+  <circle class="cls-1" cx="317.66" cy="323.26" r="23.43" transform="translate(-65.2 80.73) rotate(-13.15)"></circle>
+  <circle class="cls-1" cx="399.01" cy="316.73" r="28.89"></circle>
+  <circle class="cls-1" cx="677.01" cy="281.76" r="28.89"></circle>
+  <circle class="cls-1" cx="508.45" cy="327" r="28.89"></circle>
+  <circle class="cls-1" cx="236.7" cy="317.99" r="32.61" transform="translate(-67.63 63.97) rotate(-13.49)"></circle>
+  <circle class="cls-1" cx="358.98" cy="317.91" r="40.03" transform="translate(-74.24 523.45) rotate(-66.91)"></circle>
+  <circle class="cls-1" cx="733.89" cy="287.08" r="30.83" transform="translate(-53.93 305.79) rotate(-22.72)"></circle>
+  <circle class="cls-1" cx="641.31" cy="291.2" r="43.14" transform="translate(-56.82 198.01) rotate(-16.82)"></circle>
+  <circle class="cls-1" cx="440.63" cy="312.3" r="30.54" transform="translate(-91.78 403.04) rotate(-45)"></circle>
+  <circle class="cls-1" cx="563.38" cy="322.03" r="23.31" transform="translate(-17.98 610.33) rotate(-56.13)"></circle>
+  <circle class="cls-1" cx="536.26" cy="316.73" r="12.79"></circle>
+  <circle class="cls-1" cx="590.76" cy="293.91" r="27.58"></circle>
+  <circle class="cls-1" cx="475.69" cy="314.47" r="15.59"></circle>
+  <circle class="cls-1" cx="758.42" cy="277.27" r="11.65" transform="translate(-43.3 180.73) rotate(-13.22)"></circle>
+</svg>
