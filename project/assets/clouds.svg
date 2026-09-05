@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="#DDE6F0">
+  <defs>
+    
+  </defs>
+  <g id="Layer_2" data-name="Layer 2">
+    <rect class="cls-2" width="800" height="400" fill="none"></rect>
+  </g>
+  <g id="Layer_5" data-name="Layer 5">
+    <polygon class="cls-3" points="800 199.37 681.79 176.73 548.37 236.27 419.3 263.98 306.94 219.99 179.43 230.94 0 212.13 0 337.22 800 337.22 800 199.37"></polygon>
+    <circle class="cls-3" cx="71.15" cy="200" r="19.92"></circle>
+    <path class="cls-3" d="M66.11,214.68c0-36.51-29.6-66.11-66.11-66.11v132.23c36.51,0,66.11-29.6,66.11-66.11Z"></path>
+    <path class="cls-3" d="M733.89,214.68c0,36.51,29.6,66.11,66.11,66.11v-132.23c-36.51,0-66.11,29.6-66.11,66.11Z"></path>
+    <circle class="cls-3" cx="149.31" cy="218.1" r="42.28" transform="translate(-46.89 40.99) rotate(-13.53)"></circle>
+    <circle class="cls-3" cx="98.34" cy="231.94" r="42.28" transform="translate(-153.55 236.23) rotate(-68)"></circle>
+    <circle class="cls-3" cx="230.04" cy="246.53" r="42.28" transform="translate(-51.3 60.67) rotate(-13.53)"></circle>
+    <circle class="cls-3" cx="61.55" cy="230.94" r="42.28" transform="translate(-175.57 200.96) rotate(-67.87)"></circle>
+    <circle class="cls-3" cx="288.77" cy="228.75" r="33.71"></circle>
+    <circle class="cls-3" cx="333.67" cy="222.66" r="17.68"></circle>
+    <circle class="cls-3" cx="430.59" cy="243.78" r="28.89"></circle>
+    <circle class="cls-3" cx="255.84" cy="204.29" r="28.89"></circle>
+    <circle class="cls-3" cx="699.55" cy="188.15" r="28.89"></circle>
+    <circle class="cls-3" cx="533.22" cy="240.34" r="25.66" transform="translate(-33.56 95.95) rotate(-9.97)"></circle>
+    <circle class="cls-3" cx="536.26" cy="260.37" r="42.45" transform="translate(-44.16 124.41) rotate(-12.71)"></circle>
+    <circle class="cls-3" cx="708.68" cy="226.34" r="42.45" transform="translate(-33.29 172.11) rotate(-13.53)"></circle>
+    <circle class="cls-3" cx="614.66" cy="258.95" r="42.45" transform="translate(-43.53 151.02) rotate(-13.53)"></circle>
+    <circle class="cls-3" cx="193.33" cy="223.43" r="23.47" transform="translate(-33 33.5) rotate(-9.13)"></circle>
+    <circle class="cls-3" cx="105.69" cy="185.79" r="19.84" transform="translate(-106.94 207.62) rotate(-66.23)"></circle>
+    <circle class="cls-3" cx="365" cy="233.55" r="29.89" transform="translate(-40.1 79.73) rotate(-11.82)"></circle>
+    <circle class="cls-3" cx="762.02" cy="212.52" r="35.1"></circle>
+    <circle class="cls-3" cx="654.77" cy="214.21" r="37.32" transform="translate(187.39 720.34) rotate(-65.4)"></circle>
+    <circle class="cls-3" cx="730.94" cy="193.88" r="18.48"></circle>
+    <circle class="cls-3" cx="477.91" cy="247.28" r="30.54"></circle>
+    <circle class="cls-3" cx="573.25" cy="223.43" r="33.3" transform="translate(-35.71 135.66) rotate(-13.09)"></circle>
+    <circle class="cls-3" cx="607.81" cy="222.66" r="23.11" transform="translate(40.32 534.05) rotate(-48.87)"></circle>
+    <circle class="cls-3" cx="500.66" cy="226.34" r="15.59"></circle>
+    <circle class="cls-3" cx="395.15" cy="236.17" r="15.59"></circle>
+    <circle class="cls-3" cx="219.67" cy="203.66" r="15.59"></circle>
+  </g>
+  <g id="Layer_4" data-name="Layer 4">
+    <polygon class="cls-4" points="800 253.62 632.63 251.45 423.03 281.44 278.19 272.45 0 260.99 0 352.48 800 352.48 800 253.62"></polygon>
+    <circle class="cls-4" cx="53.23" cy="253.62" r="25.98" transform="translate(-39.94 11.8) rotate(-9.22)"></circle>
+    <path class="cls-4" d="M53.23,249.2c0-29.4-23.83-53.23-53.23-53.23v106.45c29.4,0,53.23-23.83,53.23-53.23Z"></path>
+    <path class="cls-4" d="M800,195.97c-29.4,0-53.23,23.83-53.23,53.23s23.83,53.23,53.23,53.23v-106.45Z"></path>
+    <circle class="cls-4" cx="183.48" cy="279.6" r="40.03"></circle>
+    <circle class="cls-4" cx="90.96" cy="260.69" r="24.99" transform="translate(-157.69 140.67) rotate(-45)"></circle>
+    <circle class="cls-4" cx="135.53" cy="255.85" r="28.37" transform="translate(-141.22 170.77) rotate(-45)"></circle>
+    <circle class="cls-4" cx="292.6" cy="257.64" r="28.89"></circle>
+    <circle class="cls-4" cx="323.78" cy="257.64" r="28.89"></circle>
+    <circle class="cls-4" cx="400" cy="269.98" r="24.39"></circle>
+    <circle class="cls-4" cx="683.74" cy="236.69" r="28.89"></circle>
+    <circle class="cls-4" cx="643.13" cy="249.2" r="30.41" transform="translate(12.16 527.75) rotate(-45)"></circle>
+    <circle class="cls-4" cx="518.4" cy="258.95" r="28.89"></circle>
+    <circle class="cls-4" cx="246.63" cy="249.2" r="40.03"></circle>
+    <circle class="cls-4" cx="358.98" cy="274.91" r="24.09"></circle>
+    <circle class="cls-4" cx="748.32" cy="244.72" r="21.75"></circle>
+    <circle class="cls-4" cx="704.56" cy="274.91" r="35.1" transform="translate(-44.69 171.92) rotate(-13.49)"></circle>
+    <circle class="cls-4" cx="603.81" cy="232.64" r="20.51"></circle>
+    <circle class="cls-4" cx="578.3" cy="261.68" r="40.03"></circle>
+    <circle class="cls-4" cx="489.51" cy="253.34" r="16.64" transform="translate(69.62 610.39) rotate(-67.74)"></circle>
+    <circle class="cls-4" cx="439.69" cy="281.31" r="30.54"></circle>
+    <circle class="cls-4" cx="484.62" cy="285.07" r="30.54"></circle>
+    <circle class="cls-4" cx="435.6" cy="282.03" r="15.59"></circle>
+    <circle class="cls-4" cx="715.61" cy="257.64" r="20.31"></circle>
+  </g>
+  <g id="Layer_1" data-name="Layer 1">
+    <polygon class="cls-1" points="800 290.8 654.77 287.84 549.05 322.59 413.29 314.61 296.64 319.63 176.06 326.5 77.26 309.97 0 293.91 0 400 800 400 800 290.8"></polygon>
+    <circle class="cls-1" cx="63.72" cy="283.7" r="25.98"></circle>
+    <path class="cls-1" d="M66.11,328.18c0-36.51-29.6-66.11-66.11-66.11v132.23c36.51,0,66.11-29.6,66.11-66.11Z"></path>
+    <path class="cls-1" d="M733.89,328.18c0,36.51,29.6,66.11,66.11,66.11v-132.23c-36.51,0-66.11,29.6-66.11,66.11Z"></path>
+    <circle class="cls-1" cx="185.81" cy="312.3" r="50.28"></circle>
+    <circle class="cls-1" cx="103.75" cy="304.68" r="40.03"></circle>
+    <circle class="cls-1" cx="141.86" cy="291.27" r="23.34" transform="translate(-63.72 40.87) rotate(-13.42)"></circle>
+    <circle class="cls-1" cx="279.64" cy="313.48" r="17.6" transform="translate(-139.76 289.55) rotate(-45)"></circle>
+    <circle class="cls-1" cx="317.66" cy="323.26" r="23.43" transform="translate(-65.2 80.73) rotate(-13.15)"></circle>
+    <circle class="cls-1" cx="399.01" cy="316.73" r="28.89"></circle>
+    <circle class="cls-1" cx="677.01" cy="281.76" r="28.89"></circle>
+    <circle class="cls-1" cx="508.45" cy="327" r="28.89"></circle>
+    <circle class="cls-1" cx="236.7" cy="317.99" r="32.61" transform="translate(-67.63 63.97) rotate(-13.49)"></circle>
+    <circle class="cls-1" cx="358.98" cy="317.91" r="40.03" transform="translate(-74.24 523.45) rotate(-66.91)"></circle>
+    <circle class="cls-1" cx="733.89" cy="287.08" r="30.83" transform="translate(-53.93 305.79) rotate(-22.72)"></circle>
+    <circle class="cls-1" cx="641.31" cy="291.2" r="43.14" transform="translate(-56.82 198.01) rotate(-16.82)"></circle>
+    <circle class="cls-1" cx="440.63" cy="312.3" r="30.54" transform="translate(-91.78 403.04) rotate(-45)"></circle>
+    <circle class="cls-1" cx="563.38" cy="322.03" r="23.31" transform="translate(-17.98 610.33) rotate(-56.13)"></circle>
+    <circle class="cls-1" cx="536.26" cy="316.73" r="12.79"></circle>
+    <circle class="cls-1" cx="590.76" cy="293.91" r="27.58"></circle>
+    <circle class="cls-1" cx="475.69" cy="314.47" r="15.59"></circle>
+    <circle class="cls-1" cx="758.42" cy="277.27" r="11.65" transform="translate(-43.3 180.73) rotate(-13.22)"></circle>
+  </g>
+</svg>

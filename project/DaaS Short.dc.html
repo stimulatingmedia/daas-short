@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#922DB1"/><polygon points="40,32 40,68 70,50" fill="#72DBFA"/></svg></template>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>html,body{margin:0;height:100%;background:#0a0a0a;}</style>
+</helmet>
+<div style="position:absolute;inset:0;">
+  <x-import component-from-global-scope="DaaSVideo" from="./animations.jsx" accent="{{ accent }}" accent2="{{ accent2 }}" brand="{{ brand }}" url="{{ url }}" style="position:absolute;inset:0;" hint-size="100%,100%"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#922DB1&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;accent2&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#72DBFA&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;brand&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Stimulating Media&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;url&quot;: { &quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;stimulatingmedia.com/daas&quot;, &quot;tsType&quot;: &quot;string&quot; }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      accent: this.props.accent ?? '#922DB1',
+      accent2: this.props.accent2 ?? '#72DBFA',
+      brand: this.props.brand ?? 'Stimulating Media',
+      url: this.props.url ?? 'stimulatingmedia.com/daas',
+    };
+  }
+}
+</script>
+</body>
+</html>
