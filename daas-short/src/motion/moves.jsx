@@ -249,13 +249,14 @@ export function Sparkles({ at = 0, nodes, color = C.ube50, seed = 0, twinkle = t
    and the brand's scalloped cloud band resting at the bottom of the frame:
    whatever sits above it is already in flight. The sky is open at the top
    (the spec's clouds are the footer of the sky, never a ceiling). */
-export function DarkBg({ footer = true, stars = 56, seed = 0 }) {
+export function DarkBg({ footer = true, stars = 56, seed = 0, twinkle = true }) {
   const time = useTime();
   const pts = [];
   for (let i = 0; i < stars; i++) {
     const r = 1.2 + rnd(i + seed + 7) * 2.2;
     let o = 0.25 + rnd(i + seed + 3) * 0.5;
-    if (i < 3) { const cycle = 6 + rnd(i + seed) * 6; const u = ((time + rnd(i) * cycle) % cycle) / cycle; o = o + (1 - o) * E.standard(1 - Math.abs(u * 2 - 1)); }
+    // Three stars breathe on 6–12s cycles — except on the end card, where nothing moves.
+    if (twinkle && i < 3) { const cycle = 6 + rnd(i + seed) * 6; const u = ((time + rnd(i) * cycle) % cycle) / cycle; o = o + (1 - o) * E.standard(1 - Math.abs(u * 2 - 1)); }
     pts.push(<circle key={i} cx={rnd(i + seed) * 1080} cy={rnd(i + seed + 99) * 1700} r={r} fill={C.ice} opacity={o} />);
   }
   return (
@@ -276,10 +277,15 @@ export function DarkBg({ footer = true, stars = 56, seed = 0 }) {
    One wipe per six seconds; never combined with a zoom. */
 const BAND_H = 540; // cloud-footer.svg is 800 x 400 -> 1080 x 540; the scallops fill its lower ~230px
 /* Two mask layers (added): the scalloped SVG strip at the top, a solid fill below it. Longhands, prefixed, so Chromium applies them. */
+/* The two layers OVERLAP by 4px rather than butting at BAND_H: where they met
+   exactly, mask anti-aliasing left a 1px hairline of the outgoing scene across
+   every transition. The band's bottom ~130px are fully opaque, so the overlap
+   costs nothing. */
+const SEAM = 4;
 const sheetMask = {
   WebkitMaskImage: `url(${A.cloudFooter}), linear-gradient(#000, #000)`, maskImage: `url(${A.cloudFooter}), linear-gradient(#000, #000)`,
-  WebkitMaskSize: `1080px ${BAND_H}px, 100% calc(100% - ${BAND_H}px)`, maskSize: `1080px ${BAND_H}px, 100% calc(100% - ${BAND_H}px)`,
-  WebkitMaskPosition: `top center, 0 ${BAND_H}px`, maskPosition: `top center, 0 ${BAND_H}px`,
+  WebkitMaskSize: `1080px ${BAND_H}px, 100% calc(100% - ${BAND_H - SEAM}px)`, maskSize: `1080px ${BAND_H}px, 100% calc(100% - ${BAND_H - SEAM}px)`,
+  WebkitMaskPosition: `top center, 0 ${BAND_H - SEAM}px`, maskPosition: `top center, 0 ${BAND_H - SEAM}px`,
   WebkitMaskRepeat: 'no-repeat, no-repeat', maskRepeat: 'no-repeat, no-repeat',
 };
 const trailMask = {
@@ -370,18 +376,22 @@ export const tint = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `
 const frost = `blur(${GLASS.blur}px) saturate(1.2)`;
 export const glassLight = {
   background: tint('#ffffff', GLASS.alpha),
-  border: '1px solid rgba(255, 255, 255, 0.7)',
+  // A Platinum Ice hairline, not white: a white edge on a light ground is no edge.
+  border: `1px solid ${tint(C.ice, 0.9)}`,
   boxShadow: `${SHADOW.lg}, inset 0 1px 0 rgba(255, 255, 255, 0.8)`,
   backdropFilter: frost, WebkitBackdropFilter: frost,
   borderRadius: RADIUS.xl, color: C.navy,
 };
+/* Navy glass carries its read in the fill, edge and highlight rather than in the
+   frost: on a near-flat night sky there is little detail to sample, and a
+   backdrop filter under a 3D-posed ancestor samples inconsistently frame to
+   frame. 0.62 (not the page value 0.72) lets the glows behind it come through. */
 export const glassDark = {
   background: tint(C.navy, GLASS.alphaDark),
-  // 0.28, not the page-scale 0.22: at 1080 wide on a phone the 0.22 hairline vanishes against the sky.
-  border: `1px solid ${tint(C.ice, 0.28)}`,
-  boxShadow: `0 18px 48px ${tint(C.navy, 0.28)}, inset 0 1px 0 ${tint(C.ice, 0.18)}`,
+  border: `1.5px solid ${tint(C.ice, 0.38)}`,
+  boxShadow: `0 18px 48px ${tint(C.navy, 0.28)}, inset 0 1.5px 0 ${tint(C.ice, 0.35)}`,
   backdropFilter: frost, WebkitBackdropFilter: frost,
-  borderRadius: RADIUS.lg, color: C.white,
+  borderRadius: RADIUS.xl, color: C.white,
 };
 /* Capsules: the same material at pill radius (role chips, task pills, the URL). */
 export const glassPill = { ...glassLight, borderRadius: RADIUS.pill };
@@ -391,7 +401,7 @@ export const glassPillDark = { ...glassDark, borderRadius: RADIUS.pill };
    middle of a card and reads as varnish). */
 const SHEEN = {
   light: 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0) 42%)',
-  dark: `linear-gradient(180deg, ${tint(C.ice, 0.10)} 0%, ${tint(C.ice, 0)} 40%)`,
+  dark: `linear-gradient(180deg, ${tint(C.ice, 0.30)} 0%, ${tint(C.ice, 0)} 40%)`,
 };
 export function Glass({ dark = false, pill = false, sheen = true, style, children }) {
   const base = dark ? (pill ? glassPillDark : glassDark) : (pill ? glassPill : glassLight);
@@ -485,14 +495,14 @@ export function IconTile({ name, at, size = 56, radius = 18, tone = 'nebula', st
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       transform: `scale(${0.6 + 0.4 * pop})`, opacity: pop, ...style,
     }}>
-      <Glyph name={name} size={Math.round(size * 0.57)} color={ink} />
+      <Glyph name={name} size={Math.round(size * 0.57)} color={ink} stroke={2.6} />
     </div>
   );
 }
 
 /* Ambient bob for floating props after they land (Depth Field): 12px on a
    slow 6s-each-way cycle, standard ease, frozen until `from`. */
-export function bob(time, from, amp = 12, halfCycle = 6) {
+export function bob(time, from, amp = DEPTH.drift, halfCycle = 6) {
   if (time < from) return 0;
   const u = ((time - from) % (halfCycle * 2)) / halfCycle; // 0..2
   const k = u <= 1 ? u : 2 - u;

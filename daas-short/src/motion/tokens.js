@@ -62,7 +62,7 @@ export const DEPTH = {
 };
 
 /* Glass surface material: frost 16px, 62% white (light) — navy glass runs 72%. */
-export const GLASS = { blur: glassTok.blurPx, alpha: glassTok.alpha, alphaDark: 0.72 };
+export const GLASS = { blur: glassTok.blurPx, alpha: glassTok.alpha, alphaDark: 0.62 };
 
 /* Stagger (s). One cadence per scene; every delay capped at 400ms with min(). */
 export const CADENCE = { tight: staggerTok.tight / 1000, base: staggerTok.base / 1000, wide: staggerTok.wide / 1000 };

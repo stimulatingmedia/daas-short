@@ -29,8 +29,8 @@ function UrlPill({ at, url }) {
         {/* The action pill: Royal Dark Ube (the reference's solid vivid pill), a top-edge highlight,
             and the arrow sitting in the reference's rounded-square icon tile. */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 20, fontFamily: FONT.display, fontSize: 38, fontWeight: 700, color: '#fff', background: C.ube, borderRadius: 100, padding: '18px 46px 18px 20px', whiteSpace: 'nowrap', boxShadow: `${SHADOW.action}, inset 0 1px 0 rgba(255,255,255,0.28)` }}>
-          <span style={{ flex: 'none', width: 56, height: 56, borderRadius: 16, background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Glyph name="arrow" size={30} color="#fff" stroke={2.6} />
+          <span style={{ flex: 'none', width: 56, height: 56, borderRadius: 18, background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Glyph name="arrow" size={32} color="#fff" stroke={2.6} />
           </span>
           {url}
         </div>
@@ -42,7 +42,7 @@ function UrlPill({ at, url }) {
 export default function SceneCTA({ url }) {
   const { start, end } = SCENE.cta;
   return (
-    <Scene start={start} end={end} exitAt={Infinity} bg={<DarkBg footer seed={9} />}>
+    <Scene start={start} end={end} exitAt={Infinity} bg={<DarkBg footer seed={9} twinkle={false} />}>
       <Sparkles at={B.sparkles} nodes={SPARKS} seed={61} twinkle={false} />
       <Sting at={B.sting} y={470} width={760} ink={C.cream} />
       <WordRise at={B.line} y={720} segs={SEGS} size={56} weight={800} color={C.cream} w={880} lh={1.22} />

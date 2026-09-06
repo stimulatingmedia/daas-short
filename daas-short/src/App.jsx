@@ -1,4 +1,4 @@
-/* The DaaS short: seven scenes on one 59s stage, cloud-band wipes between
+/* The DaaS short: seven scenes on one 55s stage, cloud-band wipes between
    them, a persistent watermark and progress bar. Tweak copy/URL here. */
 import React from 'react';
 import { Stage, useTime } from './engine/timeline.jsx';
@@ -25,7 +25,8 @@ const onDark = (t) => (t >= SCENE.solution.start && t < SCENE.solution.end) || t
 function Watermark() {
   const t = useTime();
   return (
-    <div style={{ position: 'absolute', left: 60, top: 62, fontFamily: FONT.display, fontWeight: 700, fontSize: 22, letterSpacing: TRACK.overline, textTransform: 'uppercase', color: onDark(t) ? 'rgba(243,231,211,0.92)' : C.muted }}>
+    /* Below the platform's status / header strip (the top ~140px), not inside it. */
+    <div style={{ position: 'absolute', left: 60, top: 156, fontFamily: FONT.display, fontWeight: 700, fontSize: 24, letterSpacing: TRACK.overline, textTransform: 'uppercase', color: onDark(t) ? 'rgba(243,231,211,0.92)' : C.muted }}>
       {BRAND} · DaaS
     </div>
   );
@@ -58,7 +59,7 @@ export default function App({ renderMode = false }) {
       <CloudWipe at={SCENE.settle.start} bg={<Fill color={C.white} />} />
       <CloudWipe at={SCENE.solution.start} bg={<DarkBg footer seed={5} />} />
       <CloudWipe at={SCENE.outcome.start} bg={<Fill color={C.white} />} />
-      <CloudWipe at={SCENE.cta.start} bg={<DarkBg footer seed={9} />} />
+      <CloudWipe at={SCENE.cta.start} bg={<DarkBg footer seed={9} twinkle={false} />} />
       <Watermark />
       <ProgressBar />
     </Stage>

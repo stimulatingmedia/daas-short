@@ -61,7 +61,8 @@ function LineGraph({ at, drawAt }) {
         <svg viewBox={`0 0 ${SVG.w} ${SVG.h}`} width="100%" style={{ display: 'block', overflow: 'visible' }}>
           {[80, 160, 240].map((gy) => <line key={gy} x1="20" y1={gy} x2="740" y2={gy} stroke={tint(C.ice, 0.18)} strokeWidth="2" />)}
           <line x1="20" y1="320" x2="740" y2="320" stroke={tint(C.ice, 0.34)} strokeWidth="3" />
-          <polyline points={potential} fill="none" stroke={C.green} strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} opacity="0.40" style={{ filter: 'blur(9px)' }} />
+          {/* The glow sits just under the stroke rather than dead behind it, so the line reads as a lit tube and not a highlighter mark. */}
+          <polyline points={potential} transform="translate(0 7)" fill="none" stroke={C.green} strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} opacity="0.45" style={{ filter: 'blur(10px)' }} />
           <polyline points={potential} fill="none" stroke={C.green} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} />
           <polyline points="20,300 200,296 400,288 580,290 740,282" fill="none" stroke={tint(C.ice, 0.5)} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} />
           <circle cx="740" cy="38" r={11 * dot} fill={C.green} />

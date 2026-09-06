@@ -43,7 +43,7 @@ function ChipCluster({ at, y }) {
             const u = clamp01((t - at - delay(i)) / T.enter);
             return (
               <div key={i} style={{ transform: `translateY(${(1 - E.glide(u)) * D.rise}px)`, opacity: E.glide(u), display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-                <Glass pill style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 25, letterSpacing: TRACK.wide, textTransform: 'uppercase', color: C.navy, padding: '13px 26px', whiteSpace: 'nowrap' }}>{c.label}</Glass>
+                <Glass pill style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 27, letterSpacing: TRACK.wide, textTransform: 'uppercase', color: C.navy, padding: '13px 26px', whiteSpace: 'nowrap' }}>{c.label}</Glass>
                 <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy }}>{c.tag}</div>
               </div>
             );

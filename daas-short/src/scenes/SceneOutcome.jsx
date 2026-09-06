@@ -19,7 +19,7 @@ const B = { headline: 0, sparkles: 0.7, cards: 0.8, hero: 4.3 };
 const OUTCOMES = [
   { pain: 'Messy email threads', win: 'Streamlined design requests' },
   { pain: 'Weeks of waiting', win: 'Projects done in days, not weeks' },
-  { pain: 'No one to design it', win: 'A full creative team on demand' },
+  { pain: 'No one to design it', win: 'A full creative team on demand' },
   { pain: 'Stuck in a queue', win: 'No more design bottlenecks' },
   { pain: 'Files scattered everywhere', win: 'Brand assets in one place' },
   { pain: 'Off-brand, inconsistent', win: 'Total brand consistency' },
@@ -82,20 +82,21 @@ function OutcomeGrid({ cardsAt, heroAt }) {
         return (
           <div key={i} style={{ position: 'absolute', left, top, width: COL_W, height: ROW_H, opacity: painIn }}>
             <div style={{ width: '100%', height: '100%', transformOrigin: 'center center', transform: `translateY(${(1 - painIn) * D.rise}px) scaleY(${Math.max(0.001, sy)})` }}>
-              <Glass style={{ width: '100%', height: '100%', borderRadius: 26, padding: '26px 26px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 14, boxSizing: 'border-box' }}>
+              <Glass style={{ width: '100%', height: '100%', padding: '26px 26px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 14, boxSizing: 'border-box' }}>
                 {showWin ? (
                   <React.Fragment>
                     {/* The reference's solid rounded-square tile, popping on launch over fast. */}
                     <div style={{ flex: 'none', width: 56, height: 56, borderRadius: 18, background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(6,49,65,0.10), inset 0 1px 0 rgba(255,255,255,0.35)', transform: `scale(${0.6 + 0.4 * check})`, opacity: check }}>
                       <Glyph name="check" size={32} color={C.navy} stroke={3.2} />
                     </div>
-                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy, lineHeight: 1.08 }}>{o.win}</div>
-                    <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 26, color: C.muted, textDecoration: 'line-through', textDecorationColor: C.nebula, opacity: 0.85 }}>{o.pain}</div>
+                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy, lineHeight: 1.08, textWrap: 'balance' }}>{o.win}</div>
+                    {/* The strike is Royal Dark Ube: a Nebula line on white glass measured 1.19:1 and simply was not there. */}
+                    <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 26, lineHeight: 1.2, color: C.muted, textDecoration: 'line-through', textDecorationColor: C.ube, textDecorationThickness: 3 }}>{o.pain}</div>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
                     <div style={{ flex: 'none', width: 56, height: 56, borderRadius: 18, border: `4px solid ${C.nebula}`, opacity: 0.55 }} />
-                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy, lineHeight: 1.08 }}>{o.pain}</div>
+                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy, lineHeight: 1.08, textWrap: 'balance' }}>{o.pain}</div>
                   </React.Fragment>
                 )}
               </Glass>

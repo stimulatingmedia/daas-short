@@ -11,11 +11,11 @@
    whole frame), by which point the card before it is 97% of the way down; the
    icon tile pops on `launch` over `fast` at 40% of its card's entrance
    (container before content). Six beats, not a stagger: Ben asked for one at
-   a time. The service marquee (the one ambient loop) starts only after the
-   last card has landed. Cut from 12s to 8s so the scene moves on. */
+   a time. The service list lands once the sixth card is down. Cut from 12s to
+   8s so the scene moves on. */
 import React from 'react';
 import { useLocal, useTime } from '../engine/timeline.jsx';
-import { Scene, DarkBg, Eyebrow, Rise, WordRise, Mark, Glass, Glow, Pose, IconTile } from '../motion/moves.jsx';
+import { Scene, DarkBg, Eyebrow, Rise, WordRise, Mark, Glass, Glow, Pose, IconTile, tint } from '../motion/moves.jsx';
 import { T, D, E, prog, clamp01 } from '../motion/tokens.js';
 import { C, FONT } from '../brand/palette.js';
 import { SCENE } from './plan.js';
@@ -23,7 +23,7 @@ import { SCENE } from './plan.js';
 const B = { blast: 0, eyebrow: 0.2, daas: 0.3, tagline: 1.2, cards: 2.0 };
 const cardAt = (i) => B.cards + i * T.beat;         // one per beat: 2.0, 2.4, 2.8, 3.2, 3.6, 4.0
 const iconAt = (i) => cardAt(i) + T.enter * 0.4;    // the tile pops at 40% of its card's entrance
-B.marquee = cardAt(5) + T.enter;                    // 4.546 — after the last card has landed
+B.services = cardAt(5) + T.enter;                   // 4.546 — after the last card has landed
 
 const FEATURES = [
   { l1: 'One intelligent', l2: 'platform', icon: 'layers' },
@@ -102,8 +102,11 @@ function BigWord({ at }) {
 /* The feature field: a 2 x 3 grid of navy glass cards on one posed plane
    (the reference's tilted glass), each with a lit icon tile and a two-line
    label. Cards land one at a time on the Launch Rise (glide, rise-40). */
-const COL_W = 400, ROW_H = 128, GAP = 24, GRID_W = COL_W * 2 + GAP, GRID_H = ROW_H * 3 + GAP * 2;
-const GX = 540 - GRID_W / 2, GY = 850, PAD = 60; // PAD: room around the grid for the pose
+/* The field sits 24px left of center so the posed near-right edge keeps its copy
+   clear of the platform action column, and low enough to breathe under the
+   tagline while the services still clear the caption stack. */
+const COL_W = 380, ROW_H = 128, GAP = 24, GRID_W = COL_W * 2 + GAP, GRID_H = ROW_H * 3 + GAP * 2;
+const GX = 540 - GRID_W / 2 - 24, GY = 900, PAD = 60; // PAD: room around the grid for the pose
 
 function FeatureField() {
   const { t } = useLocal();
@@ -116,7 +119,7 @@ function FeatureField() {
           <div key={i} style={{ position: 'absolute', left: PAD + col * (COL_W + GAP), top: PAD + row * (ROW_H + GAP), width: COL_W, height: ROW_H, transform: `translateY(${(1 - E.glide(u)) * D.rise}px)`, opacity: E.glide(u) }}>
             <Glass dark style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', gap: 18, padding: '0 22px' }}>
               <IconTile name={f.icon} at={iconAt(i)} />
-              <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 27, lineHeight: 1.14, color: C.cream, letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
+              <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 32, lineHeight: 1.1, color: C.cream, letterSpacing: '-0.015em', whiteSpace: 'nowrap' }}>
                 <div>{f.l1}</div>
                 <div>{f.l2}</div>
               </div>
@@ -128,21 +131,22 @@ function FeatureField() {
   );
 }
 
-/* Reading-order horizontal motion on `linear`: the one loop in the piece, and
-   it is the content, not behind it. It fades out before `until` so the cloud
-   band never slices a line of text that is still moving. */
-function Marquee({ at, until }) {
-  const { t } = useLocal();
-  const op = E.standard(clamp01((t - at) / T.base)) * (1 - E.standard(clamp01((t - until) / T.base)));
-  const x = -Math.max(0, t - at) * 80;
-  const line = SERVICES.join('   •   ');
-  const full = (line + '   •   ').repeat(2);
+/* The services, set once and read whole. This was a scrolling marquee, which in
+   an 8s scene showed half its list and put continuous horizontal motion on
+   running text — outside the reading-order reveals the system sanctions. Now it
+   lands with the last card on the Launch Rise and every service is legible. */
+function Services({ at }) {
   return (
-    <div style={{ position: 'absolute', left: 0, top: 1400, width: 1080, overflow: 'hidden', opacity: op, WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)', maskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)' }}>
-      <div style={{ display: 'inline-flex', whiteSpace: 'nowrap', transform: `translateX(${x}px)`, fontFamily: FONT.display, fontWeight: 500, fontSize: 30, color: 'rgba(248,248,243,0.94)', letterSpacing: '0.02em' }}>
-        <span style={{ paddingLeft: 24 }}>{full}</span>
+    <Rise at={at} y={1406} w={960}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', rowGap: 8, fontFamily: FONT.display, fontWeight: 500, fontSize: 27, letterSpacing: '0.01em', color: tint(C.cream, 0.9), lineHeight: 1.3 }}>
+        {SERVICES.map((s, i) => (
+          <React.Fragment key={s}>
+            <span>{s}</span>
+            {i < SERVICES.length - 1 && <span style={{ color: C.green, padding: '0 14px' }}>•</span>}
+          </React.Fragment>
+        ))}
       </div>
-    </div>
+    </Rise>
   );
 }
 
@@ -155,10 +159,10 @@ export default function SceneSolution() {
       <BigWord at={B.daas} />
       <WordRise at={B.tagline} y={715} segs={['Design as a Service']} size={72} weight={700} color={C.cream} w={1000} />
       {/* The soft gradient the glass floats over: two orbs behind the field, Nebula Blue and Royal Dark Ube. */}
-      <Glow at={B.cards} x={330} y={980} r={330} color={C.nebula} alpha={0.30} />
-      <Glow at={B.cards} x={800} y={1190} r={340} color={C.ube} alpha={0.30} />
+      <Glow at={B.cards} x={310} y={1030} r={340} color={C.nebula} alpha={0.30} />
+      <Glow at={B.cards} x={780} y={1240} r={340} color={C.ube} alpha={0.26} />
       <FeatureField />
-      <Marquee at={B.marquee} until={SCENE.solution.end - SCENE.solution.start - T.reveal * 0.75} />
+      <Services at={B.services} />
     </Scene>
   );
 }
