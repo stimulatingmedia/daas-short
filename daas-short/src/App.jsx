@@ -19,7 +19,10 @@ export { DURATION };
 const BRAND = 'Stimulating Media';
 const URL = 'stimulatingmedia.com/daas';
 
-/* Scenes on a dark ground: the watermark and progress bar swap to their dark-surface colors there. */
+/* Scenes whose upper frame is night sky: only the watermark swaps to its
+   dark-surface color. The progress bar never does — it rests on the Galaxy
+   White cloud footer in those scenes too, so its light palette is correct
+   everywhere and it no longer snaps color at a cut. */
 const onDark = (t) => (t >= SCENE.solution.start && t < SCENE.solution.end) || t >= SCENE.cta.start;
 
 function Watermark() {
@@ -35,10 +38,9 @@ function Watermark() {
 /* Progress: a scaleX, never a width. Reaches 100% exactly on the last frame, so the loop point is a resting frame. */
 function ProgressBar() {
   const t = useTime();
-  const dark = onDark(t);
   return (
-    <div style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 10, background: dark ? 'rgba(248,248,243,0.22)' : C.ice }}>
-      <div style={{ height: '100%', width: '100%', transformOrigin: 'left center', transform: `scaleX(${clamp01(t / DURATION)})`, background: dark ? C.green : C.ube }} />
+    <div style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 10, background: C.ice }}>
+      <div style={{ height: '100%', width: '100%', transformOrigin: 'left center', transform: `scaleX(${clamp01(t / DURATION)})`, background: C.ube }} />
     </div>
   );
 }

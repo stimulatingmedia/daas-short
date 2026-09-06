@@ -27,9 +27,7 @@ const PEAK_P = project(PEAK.x, PEAK.y, PIVOT);                      // where tha
 function LineGraph({ at, drawAt }) {
   const { t, start } = useLocal();
   const time = useTime();
-  const L = 1000;
   const draw = prog(t, drawAt, T.reveal, E.draw);
-  const off = (1 - draw) * L;
   // rocket at the moving tip of the POTENTIAL line
   let segs = [], tot = 0;
   for (let i = 1; i < PTS.length; i++) { const l = Math.hypot(PTS[i][0] - PTS[i - 1][0], PTS[i][1] - PTS[i - 1][1]); segs.push(l); tot += l; }
@@ -62,9 +60,9 @@ function LineGraph({ at, drawAt }) {
           {[80, 160, 240].map((gy) => <line key={gy} x1="20" y1={gy} x2="740" y2={gy} stroke={tint(C.ice, 0.18)} strokeWidth="2" />)}
           <line x1="20" y1="320" x2="740" y2="320" stroke={tint(C.ice, 0.34)} strokeWidth="3" />
           {/* The glow sits just under the stroke rather than dead behind it, so the line reads as a lit tube and not a highlighter mark. */}
-          <polyline points={potential} transform="translate(0 7)" fill="none" stroke={C.green} strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} opacity="0.45" style={{ filter: 'blur(10px)' }} />
-          <polyline points={potential} fill="none" stroke={C.green} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} />
-          <polyline points="20,300 200,296 400,288 580,290 740,282" fill="none" stroke={tint(C.ice, 0.5)} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} />
+          <polyline points={potential} transform="translate(0 7)" fill="none" stroke={C.green} strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - draw} opacity="0.45" style={{ filter: 'blur(10px)' }} />
+          <polyline points={potential} fill="none" stroke={C.green} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - draw} />
+          <polyline points="20,300 200,296 400,288 580,290 740,282" fill="none" stroke={tint(C.ice, 0.5)} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" pathLength="1" strokeDasharray="1" strokeDashoffset={1 - draw} />
           <circle cx="740" cy="38" r={11 * dot} fill={C.green} />
           <circle cx="740" cy="282" r={9 * dot} fill={tint(C.ice, 0.5)} />
         </svg>
