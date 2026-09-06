@@ -5,9 +5,9 @@
    hand-drawn dashed connectors tethered to her (the brand's collage motif). */
 import React from 'react';
 import { useLocal, useTime } from '../engine/timeline.jsx';
-import { Scene, Fill, Eyebrow, Kinetic, Rise, Marker, Connector, bob } from '../motion/moves.jsx';
+import { Scene, Fill, Eyebrow, Kinetic, Rise, Marker, Connector, Glass, bob } from '../motion/moves.jsx';
 import { T, D, E, delay, clamp01 } from '../motion/tokens.js';
-import { C, ILLO, FONT } from '../brand/palette.js';
+import { C, ILLO, FONT, RADIUS } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
 import { SCENE } from './plan.js';
 
@@ -36,16 +36,18 @@ function TaskCloud({ at }) {
     const d = at + delay(i);
     const u = clamp01((t - d) / T.enter);
     const y = k.y + bobPhase(time, start + d + T.enter, i);
+    // Light glass pills frosting the collage behind them; the colored dot is the
+    // system's 18px rounded-square icon square (.sm-glass__dot) in the task's hue.
     return (
       <div key={i} style={{
         position: 'absolute', left: k.x, top: y,
         transform: `translate(-50%,-50%) translateY(${(1 - E.glide(u)) * D.rise}px) rotate(${k.rot}deg)`,
-        opacity: E.glide(u), display: 'flex', alignItems: 'center', gap: 14,
-        background: C.paper, border: `1.5px solid ${C.ice}`, borderRadius: 16,
-        padding: '16px 26px', boxShadow: '0 18px 44px rgba(6,49,65,0.20)', whiteSpace: 'nowrap',
+        opacity: E.glide(u),
       }}>
-        <span style={{ flexShrink: 0, width: 13, height: 13, borderRadius: '50%', background: k.color }} />
-        <span style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 30, color: C.navy }}>{k.text}</span>
+        <Glass pill style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 28px 16px 22px', whiteSpace: 'nowrap', boxShadow: '0 18px 44px rgba(6,49,65,0.20), inset 0 1px 0 rgba(255,255,255,0.8)' }}>
+          <span style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 6, background: k.color }} />
+          <span style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 30, color: C.navy }}>{k.text}</span>
+        </Glass>
       </div>
     );
   });

@@ -5,7 +5,7 @@
    headline lands and sit off to the sides. */
 import React from 'react';
 import { useLocal } from '../engine/timeline.jsx';
-import { Scene, Fill, Kinetic, Rise, Marker, Sparkles, cardLight, fillProgress } from '../motion/moves.jsx';
+import { Scene, Fill, Kinetic, Rise, Marker, Sparkles, Glass, Glow, Pose, fillProgress } from '../motion/moves.jsx';
 import { T, D, E, delay } from '../motion/tokens.js';
 import { C, ILLO, FONT, TRACK } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
@@ -18,11 +18,15 @@ const ROWS = [
   { label: 'Gained for high-value work', val: '+ full potential', dir: 1, mag: 1.0, bar: C.green, txt: C.navy },
 ];
 
+/* The gains & losses card: light glass on the floating pose, over a Nebula glow. */
 function GainsLosses({ at, barsAt }) {
   const { t } = useLocal();
   return (
+    <React.Fragment>
+    <Glow at={at} x={540} y={790} r={380} color={C.nebula} alpha={0.26} />
+    <Pose origin="540px 790px">
     <Rise at={at} y={640} w={860}>
-      <div style={{ ...cardLight, padding: '30px 38px 34px' }}>
+      <Glass style={{ padding: '30px 38px 34px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: FONT.display, fontWeight: 700, fontSize: 20, letterSpacing: TRACK.overline, marginBottom: 22 }}>
           <span style={{ color: C.ube }}>◀ LOSS</span>
           <span style={{ color: C.navy }}>GAIN ▶</span>
@@ -48,8 +52,10 @@ function GainsLosses({ at, barsAt }) {
             </div>
           );
         })}
-      </div>
+      </Glass>
     </Rise>
+    </Pose>
+    </React.Fragment>
   );
 }
 

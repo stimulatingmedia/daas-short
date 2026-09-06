@@ -15,14 +15,18 @@ const ROOT = resolve(new URL('..', import.meta.url).pathname);
 const args = Object.fromEntries(process.argv.slice(2).map((a, i, all) => (a.startsWith('--') ? [a.slice(2), all[i + 1] && !all[i + 1].startsWith('--') ? all[i + 1] : true] : [])).filter((x) => x.length));
 const OUT = resolve(ROOT, args.out || 'out/keyframes.png');
 const COLS = parseInt(args.cols || '6', 10);
+/* --dist <dir> and --port <n> let several QA runs share one checkout (each builds
+   and serves its own copy, so a build never clobbers a render in progress). */
+const DIST = resolve(ROOT, args.dist || 'dist');
+const PORT = parseInt(args.port || '4181', 10);
 const DEFAULT_TIMES = [
   0, 0.6, 1.6, 3.2, 4.4, 6.5,            // S1 problem
   7, 7.6, 8.9, 10.2, 11.6, 13.5,         // S2 buried
   14, 14.7, 16.0, 17.2, 18.4, 20.5,      // S3 designers
   21, 21.7, 22.6, 23.4, 24.6, 26.5,      // S4 settle
-  27.2, 27.5, 27.9, 28.6, 29.6, 31.2, 34, 38.5,  // S5 solution
-  39, 40.2, 43, 44.7, 45.4, 47, 49.5,    // S6 outcome
-  50.3, 50.8, 51.6, 53.2, 54.6, 55.6, 56.8, 58.9, // S7 end card
+  27.2, 27.5, 27.9, 28.6, 29.6, 30.4, 31.2, 32.4, 34.5,  // S5 solution (cards one at a time 29.0–32.3)
+  35, 36.2, 39, 40.7, 41.4, 43, 45.5,    // S6 outcome
+  46.3, 46.8, 47.6, 49.2, 50.6, 51.6, 52.8, 54.9, // S7 end card
 ];
 const times = args.times ? String(args.times).split(',').map(Number) : DEFAULT_TIMES;
 
@@ -31,8 +35,8 @@ function loadPlaywright() {
   return require(resolve(process.env.NODE_GLOBAL_ROOT || '/opt/node22/lib/node_modules', 'playwright'));
 }
 
-if (!args['skip-build']) { console.log('› vite build'); await build({ root: ROOT, logLevel: 'warn' }); }
-const server = await preview({ root: ROOT, preview: { port: 4181, strictPort: false, open: false }, logLevel: 'silent' });
+if (!args['skip-build']) { console.log('› vite build'); await build({ root: ROOT, logLevel: 'warn', build: { outDir: DIST, emptyOutDir: true } }); }
+const server = await preview({ root: ROOT, build: { outDir: DIST }, preview: { port: PORT, strictPort: false, open: false }, logLevel: 'silent' });
 const url = server.resolvedUrls.local[0] + '?render';
 const { chromium } = loadPlaywright();
 const browser = await chromium.launch();

@@ -7,7 +7,7 @@
    Fully static for the last 2.3s: loop-safe. */
 import React from 'react';
 import { useLocal } from '../engine/timeline.jsx';
-import { Scene, DarkBg, Sting, WordRise, wordRiseLanding, Rise, Marker, Connector, Sparkles } from '../motion/moves.jsx';
+import { Scene, DarkBg, Sting, WordRise, wordRiseLanding, Rise, Marker, Connector, Sparkles, Glyph } from '../motion/moves.jsx';
 import { T, E, clamp01 } from '../motion/tokens.js';
 import { C, FONT, SHADOW } from '../brand/palette.js';
 import { SCENE } from './plan.js';
@@ -27,8 +27,12 @@ function UrlPill({ at, url }) {
   return (
     <Rise at={at} y={1175} w={800}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 18, fontFamily: FONT.display, fontSize: 38, fontWeight: 700, color: '#fff', background: C.ube, borderRadius: 100, padding: '24px 46px 24px 38px', whiteSpace: 'nowrap', boxShadow: SHADOW.action }}>
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        {/* The action pill: Royal Dark Ube (the reference's solid vivid pill), a top-edge highlight,
+            and the arrow sitting in the reference's rounded-square icon tile. */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 20, fontFamily: FONT.display, fontSize: 38, fontWeight: 700, color: '#fff', background: C.ube, borderRadius: 100, padding: '18px 46px 18px 20px', whiteSpace: 'nowrap', boxShadow: `${SHADOW.action}, inset 0 1px 0 rgba(255,255,255,0.28)` }}>
+          <span style={{ flex: 'none', width: 56, height: 56, borderRadius: 16, background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Glyph name="arrow" size={30} color="#fff" stroke={2.6} />
+          </span>
           {url}
         </div>
       </div>

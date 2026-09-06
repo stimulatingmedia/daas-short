@@ -56,7 +56,7 @@ export default function App({ renderMode = false }) {
       <CloudWipe at={SCENE.buried.start} bg={<Fill color={ILLO.sky} />} />
       <CloudWipe at={SCENE.designers.start} bg={<Fill color={ILLO.pink} />} />
       <CloudWipe at={SCENE.settle.start} bg={<Fill color={C.white} />} />
-      <CloudWipe at={SCENE.solution.start} bg={<DarkBg ceiling footer seed={5} />} />
+      <CloudWipe at={SCENE.solution.start} bg={<DarkBg footer seed={5} />} />
       <CloudWipe at={SCENE.outcome.start} bg={<Fill color={C.white} />} />
       <CloudWipe at={SCENE.cta.start} bg={<DarkBg footer seed={9} />} />
       <Watermark />

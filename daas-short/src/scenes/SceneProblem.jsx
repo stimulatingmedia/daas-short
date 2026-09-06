@@ -5,7 +5,7 @@
    the hand-written aside wipes in last. */
 import React from 'react';
 import { useLocal } from '../engine/timeline.jsx';
-import { Scene, Fill, Eyebrow, Kinetic, Rise, Marker, useCount, fmtMoney } from '../motion/moves.jsx';
+import { Scene, Fill, Eyebrow, Kinetic, Rise, Marker, Glass, Glow, Pose, useCount, fmtMoney } from '../motion/moves.jsx';
 import { T, D, E, delay, clamp01 } from '../motion/tokens.js';
 import { C, ILLO, FONT, TRACK } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
@@ -28,20 +28,27 @@ const B = {
   aside: 4.3,                 // marker wipe over `fill`
 };
 
+/* Role chips: light glass capsules on the reference's floating pose, over a
+   soft Nebula glow so the frost has something to sample. Prices stay flat type. */
 function ChipCluster({ at, y }) {
   const { t } = useLocal();
   return (
-    <div style={{ position: 'absolute', left: 540, top: y, width: 940, transform: 'translateX(-50%)', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '26px 18px' }}>
-      {ROLES.map((c, i) => {
-        const u = clamp01((t - at - delay(i)) / T.enter);
-        return (
-          <div key={i} style={{ transform: `translateY(${(1 - E.glide(u)) * D.rise}px)`, opacity: E.glide(u), display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-            <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 25, letterSpacing: TRACK.wide, textTransform: 'uppercase', color: C.navy, background: C.paper, border: `2px solid ${C.ice}`, borderRadius: 100, padding: '13px 24px', whiteSpace: 'nowrap' }}>{c.label}</div>
-            <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy }}>{c.tag}</div>
-          </div>
-        );
-      })}
-    </div>
+    <React.Fragment>
+      <Glow at={at} x={540} y={y + 90} r={380} color={C.nebula} alpha={0.22} />
+      <Pose origin={`540px ${y + 90}px`}>
+        <div style={{ position: 'absolute', left: 540, top: y, width: 940, transform: 'translateX(-50%)', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '26px 18px' }}>
+          {ROLES.map((c, i) => {
+            const u = clamp01((t - at - delay(i)) / T.enter);
+            return (
+              <div key={i} style={{ transform: `translateY(${(1 - E.glide(u)) * D.rise}px)`, opacity: E.glide(u), display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                <Glass pill style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 25, letterSpacing: TRACK.wide, textTransform: 'uppercase', color: C.navy, padding: '13px 26px', whiteSpace: 'nowrap' }}>{c.label}</Glass>
+                <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy }}>{c.tag}</div>
+              </div>
+            );
+          })}
+        </div>
+      </Pose>
+    </React.Fragment>
   );
 }
 

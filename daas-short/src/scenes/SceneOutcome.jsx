@@ -8,7 +8,7 @@
    flutters gently once he is settled. */
 import React from 'react';
 import { useLocal, useTime } from '../engine/timeline.jsx';
-import { Scene, Fill, Eyebrow, Kinetic, Sparkles, cardLight } from '../motion/moves.jsx';
+import { Scene, Fill, Eyebrow, Kinetic, Sparkles, Glass, Glow, Pose, Glyph } from '../motion/moves.jsx';
 import { T, D, E, delay, clamp01 } from '../motion/tokens.js';
 import { C, FONT } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
@@ -24,7 +24,8 @@ const OUTCOMES = [
   { pain: 'Files scattered everywhere', win: 'Brand assets in one place' },
   { pain: 'Off-brand, inconsistent', win: 'Total brand consistency' },
 ];
-const COL_W = 426, ROW_H = 312, GAP = 28, GX = 110, GY = 710;
+const COL_W = 426, ROW_H = 312, GAP = 28, GX = 100, GY = 710;
+const GRID_CX = GX + COL_W + GAP / 2, GRID_CY = GY + (ROW_H * 3 + GAP * 2) / 2; // the pose pivots on the grid's center
 const IMGW = 360, IMGH = IMGW * (712 / 720), FEET = 0.913;
 const START_TOP = 1660, SETTLE_TOP = 432 - FEET * IMGH;
 const feetY = (u) => START_TOP + (SETTLE_TOP - START_TOP) * E.settle(u) + FEET * IMGH;
@@ -50,8 +51,15 @@ function OutcomeGrid({ cardsAt, heroAt }) {
   const streakOp = manOp * speed * (1 - settled);
   const manBodyX = 540 - (0.5 - 0.28) * IMGW;
   const feet = manTop + FEET * IMGH;
+  /* Light glass cards on the floating pose over two soft glows; the hero and
+     his streaks fly in screen space, outside the pose. The badge is the
+     reference's rounded-square tile: hollow Nebula while the pain shows,
+     solid Stimulating Green with the check once the row has flipped. */
   return (
     <React.Fragment>
+      <Glow at={cardsAt} x={380} y={960} r={380} color={C.nebula} alpha={0.20} />
+      <Glow at={cardsAt} x={740} y={1440} r={380} color={C.ube} alpha={0.16} />
+      <Pose origin={`${GRID_CX}px ${GRID_CY}px`}>
       {OUTCOMES.map((o, i) => {
         const col = i % 2, row = Math.floor(i / 2);
         const left = GX + col * (COL_W + GAP), top = GY + row * (ROW_H + GAP);
@@ -65,26 +73,27 @@ function OutcomeGrid({ cardsAt, heroAt }) {
         return (
           <div key={i} style={{ position: 'absolute', left, top, width: COL_W, height: ROW_H, opacity: painIn }}>
             <div style={{ width: '100%', height: '100%', transformOrigin: 'center center', transform: `translateY(${(1 - painIn) * D.rise}px) scaleY(${Math.max(0.001, sy)})` }}>
-              <div style={{ ...cardLight, position: 'relative', width: '100%', height: '100%', borderRadius: 26, padding: '34px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 18, boxSizing: 'border-box' }}>
+              <Glass style={{ width: '100%', height: '100%', borderRadius: 26, padding: '34px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 18, boxSizing: 'border-box' }}>
                 {showWin ? (
                   <React.Fragment>
-                    <div style={{ flex: 'none', width: 64, height: 64, borderRadius: '50%', background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 24px rgba(6,49,65,0.14)', transform: `scale(${0.6 + 0.4 * check})`, opacity: check }}>
-                      <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 6.5" stroke={C.navy} strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    <div style={{ flex: 'none', width: 64, height: 64, borderRadius: 18, background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 24px rgba(6,49,65,0.14)', transform: `scale(${0.6 + 0.4 * check})`, opacity: check }}>
+                      <Glyph name="check" size={34} color={C.navy} stroke={3.2} />
                     </div>
                     <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 38, color: C.navy, lineHeight: 1.08 }}>{o.win}</div>
                     <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 22, color: C.muted, textDecoration: 'line-through', textDecorationColor: C.nebula, opacity: 0.85 }}>{o.pain}</div>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
-                    <div style={{ flex: 'none', width: 64, height: 64, borderRadius: '50%', border: `4px solid ${C.nebula}`, opacity: 0.55 }} />
+                    <div style={{ flex: 'none', width: 64, height: 64, borderRadius: 18, border: `4px solid ${C.nebula}`, opacity: 0.55 }} />
                     <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 38, color: C.navy, lineHeight: 1.08 }}>{o.pain}</div>
                   </React.Fragment>
                 )}
-              </div>
+              </Glass>
             </div>
           </div>
         );
       })}
+      </Pose>
       {/* speed streaks behind the hero: Cosmic Orange and Stimulating Green */}
       <div style={{ position: 'absolute', left: manBodyX, top: feet - 24, width: 180, height: 260, transform: 'translateX(-50%)', opacity: streakOp, pointerEvents: 'none', zIndex: 4 }}>
         {[0, 1, 2, 3, 4, 5].map((k) => {

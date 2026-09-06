@@ -6,9 +6,10 @@
    exact. Spec: github.com/stimulatingmedia/motiondesign/MOTION-SPEC.md */
 import React from 'react';
 import { Sprite, useLocal, useTime } from '../engine/timeline.jsx';
-import { T, D, E, SCALE, delay, prog, lin, clamp01 } from './tokens.js';
+import { T, D, E, SCALE, DEPTH, GLASS, delay, prog, lin, clamp01 } from './tokens.js';
 import { C, FONT, TRACK, RADIUS, SHADOW } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
+import { GLYPH } from '../brand/glyphs.js';
 import { LOCKUP, LOCKUP_VIEWBOX, MARK_VIEWBOX, BLAST_SMALL, BLAST_LARGE } from '../brand/lockup.js';
 
 /* Deterministic pseudo-random for stable scatter (same value every frame). */
@@ -358,19 +359,120 @@ export function Sting({ at, x = 540, y, width = 760, ink = C.cream }) {
 }
 export const STING_CORE = T.count;
 
-/* ── Glass card (dark) ───────────────────────────────────────────────────────
-   The material for cards on navy: frosted, hairline light edge, navy shadow,
-   cream headings. Blur is a static material, not motion. */
+/* ── Glass surface ───────────────────────────────────────────────────────────
+   The reference's material: frosted cards floating over a soft gradient. The
+   spec's Glass surface: 16px frost at 62% white (light) or 72% navy (dark), a
+   hairline light edge, an inset top highlight, a navy-tinted shadow (never warm
+   black). Blur is a surface property, not motion: it never animates and never
+   sits inside a blurred Depth Field layer (a filtered layer is a backdrop root,
+   so the frost would sample nothing). <Glass> adds the reference's sheen: a
+   soft light sweep from the top-left corner, painted under the content. */
+export const tint = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${a})`; };
+const frost = `blur(${GLASS.blur}px) saturate(1.2)`;
+export const glassLight = {
+  background: tint('#ffffff', GLASS.alpha),
+  border: '1px solid rgba(255, 255, 255, 0.7)',
+  boxShadow: `${SHADOW.lg}, inset 0 1px 0 rgba(255, 255, 255, 0.8)`,
+  backdropFilter: frost, WebkitBackdropFilter: frost,
+  borderRadius: RADIUS.xl, color: C.navy,
+};
 export const glassDark = {
-  background: 'rgba(6, 49, 65, 0.72)',
-  border: '1px solid rgba(221, 230, 240, 0.22)',
-  boxShadow: '0 18px 48px rgba(6, 49, 65, 0.28), inset 0 1px 0 rgba(221, 230, 240, 0.18)',
-  backdropFilter: 'blur(16px) saturate(1.2)', WebkitBackdropFilter: 'blur(16px) saturate(1.2)',
+  background: tint(C.navy, GLASS.alphaDark),
+  border: `1px solid ${tint(C.ice, 0.22)}`,
+  boxShadow: `0 18px 48px ${tint(C.navy, 0.28)}, inset 0 1px 0 ${tint(C.ice, 0.18)}`,
+  backdropFilter: frost, WebkitBackdropFilter: frost,
   borderRadius: RADIUS.lg, color: C.white,
 };
+/* Capsules: the same material at pill radius (role chips, task pills, the URL). */
+export const glassPill = { ...glassLight, borderRadius: RADIUS.pill };
+export const glassPillDark = { ...glassDark, borderRadius: RADIUS.pill };
+/* Kept for the collage scenes that have not moved to glass. */
 export const cardLight = {
   background: C.paper, border: `1.5px solid ${C.ice}`, borderRadius: RADIUS.xl, boxShadow: SHADOW.lg,
 };
+const SHEEN = {
+  light: 'linear-gradient(155deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.18) 38%, rgba(255,255,255,0) 62%)',
+  dark: `linear-gradient(155deg, ${tint(C.ice, 0.16)} 0%, ${tint(C.ice, 0.05)} 40%, ${tint(C.ice, 0)} 65%)`,
+};
+export function Glass({ dark = false, pill = false, sheen = true, style, children }) {
+  const base = dark ? (pill ? glassPillDark : glassDark) : (pill ? glassPill : glassLight);
+  return (
+    <div style={{ position: 'relative', isolation: 'isolate', ...base, ...style }}>
+      {sheen && <div style={{ position: 'absolute', inset: 0, zIndex: -1, borderRadius: 'inherit', background: dark ? SHEEN.dark : SHEEN.light, pointerEvents: 'none' }} />}
+      {children}
+    </div>
+  );
+}
+
+/* ── Glow ───────────────────────────────────────────────────────────────────
+   The soft gradient the reference floats its glass over. A large radial orb in
+   one brand hue at low alpha, placed BEHIND glass so the frost has something to
+   sample (on a flat illustration ground a glass card would otherwise read as a
+   tinted card). Static; it fades up with the scene's default entrance. */
+export function Glow({ at = 0, x, y, r = 300, color = C.nebula, alpha = 0.32 }) {
+  const { t } = useLocal();
+  const op = E.glide(clamp01((t - at) / T.enter));
+  return (
+    <div style={{
+      position: 'absolute', left: x, top: y, width: r * 2, height: r * 2, transform: 'translate(-50%,-50%)', borderRadius: '50%',
+      background: `radial-gradient(circle, ${tint(color, alpha)} 0%, ${tint(color, alpha * 0.45)} 38%, ${tint(color, 0)} 72%)`,
+      opacity: op, pointerEvents: 'none',
+    }} />
+  );
+}
+
+/* ── Pose (Depth Field) ─────────────────────────────────────────────────────
+   The reference's cards are tilted in perspective. In Expressive the field
+   holds a static 12° pose: rotateX(+tilt) rotateY(−tilt) under a 1200px
+   perspective. `layer` scales the tilt (front 1, mid 0.75, back 0.5) and, for
+   the far layers, adds the depth cues: larger, dimmer, blurred. Copy stays on
+   the front layer, so blur never touches text being read. A pose, never a wobble. */
+export function Pose({ layer = 'front', x = 0, y = 0, w = 1080, h = 1920, origin = '50% 50%', style, children }) {
+  const rate = DEPTH.rate[layer] ?? 1;
+  const far = layer !== 'front';
+  const scale = layer === 'back' ? DEPTH.scaleBack : layer === 'mid' ? DEPTH.scaleMid : 1;
+  const blur = layer === 'back' ? DEPTH.blurBack : layer === 'mid' ? DEPTH.blurMid : 0;
+  return (
+    <div style={{ position: 'absolute', left: x, top: y, width: w, height: h, perspective: DEPTH.perspective, perspectiveOrigin: origin, pointerEvents: 'none', ...style }}>
+      <div style={{
+        position: 'absolute', inset: 0, transformOrigin: origin,
+        transform: `scale(${scale}) rotateX(${DEPTH.tilt * rate}deg) rotateY(${-DEPTH.tilt * rate}deg)`,
+        filter: far && blur ? `blur(${blur}px)` : 'none', opacity: layer === 'back' ? 0.75 : 1,
+      }}>{children}</div>
+    </div>
+  );
+}
+
+/* ── Icon tile + glyph ──────────────────────────────────────────────────────
+   The reference's rounded-square icon tiles. A lit tile is Nebula Blue on
+   navy glass (the .sm-glass__dot.is-on idiom), the glyph a 2.2 stroke with
+   round caps. The tile POPS on launch over fast (the icon-swap timing),
+   scale 0.6 → 1 with opacity, once its card has landed. */
+export function Glyph({ name, size = 30, color = C.navy, stroke = 2.2 }) {
+  const d = GLYPH[name] || [];
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', overflow: 'visible' }} aria-hidden="true">
+      {d.map((p, i) => <path key={i} d={p} />)}
+    </svg>
+  );
+}
+export function IconTile({ name, at, size = 56, radius = 16, tone = 'nebula', style }) {
+  const { t } = useLocal();
+  const pop = at == null ? 1 : E.launch(clamp01((t - at) / T.fast));
+  const lit = tone === 'nebula';
+  const bg = lit ? tint(C.nebula, 0.16) : tone === 'green' ? tint(C.green, 0.16) : tone === 'ube' ? tint(C.ube, 0.12) : tint(C.navy, 0.06);
+  const edge = lit ? tint(C.nebula, 0.42) : tone === 'green' ? tint(C.green, 0.5) : tone === 'ube' ? tint(C.ube, 0.35) : tint(C.navy, 0.14);
+  const ink = lit ? C.nebula : tone === 'green' ? C.green : tone === 'ube' ? C.ube : C.navy;
+  return (
+    <div style={{
+      flex: 'none', width: size, height: size, borderRadius: radius, background: bg, border: `1px solid ${edge}`,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      transform: `scale(${0.6 + 0.4 * pop})`, opacity: pop, ...style,
+    }}>
+      <Glyph name={name} size={Math.round(size * 0.52)} color={ink} />
+    </div>
+  );
+}
 
 /* Ambient bob for floating props after they land (Depth Field): 12px on a
    slow 6s-each-way cycle, standard ease, frozen until `from`. */

@@ -5,7 +5,7 @@
    peak and wipes in, and the hand-written closer wipes in below. */
 import React from 'react';
 import { useLocal, useTime } from '../engine/timeline.jsx';
-import { Scene, Fill, Kinetic, Rise, Marker, Connector, Sparkles, cardLight, bob } from '../motion/moves.jsx';
+import { Scene, Fill, Kinetic, Rise, Marker, Connector, Sparkles, Glass, Glow, Pose, bob } from '../motion/moves.jsx';
 import { T, E, prog, clamp01 } from '../motion/tokens.js';
 import { C, FONT, TRACK } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
@@ -40,23 +40,35 @@ function LineGraph({ at, drawAt }) {
   const ry = CARD.padTop + tip[1] * SCALEU - 0.16 * RHpx + parked;
   const rocketOp = E.launch(clamp01((draw - 0.05) / 0.2));
   const dot = E.launch(clamp01((draw - 0.93) / 0.07));
+  const potential = PTS.map((p) => p.join(',')).join(' ');
+  /* The chart card: light glass on the floating pose over a Nebula glow, faint
+     chart paper, and the reference's ONE neon line — Stimulating Green with a
+     soft glow beneath it (a blurred twin of the stroke; the blur is a static
+     material, only the dash draws on). What you ship stays muted. */
   return (
+    <React.Fragment>
+    <Glow at={at} x={540} y={1090} r={400} color={C.nebula} alpha={0.24} />
+    <Pose origin="540px 1090px">
     <Rise at={at} y={CARD.y} w={CARD.w}>
-      <div style={{ ...cardLight, position: 'relative', padding: `${CARD.padTop}px ${CARD.pad}px 36px` }}>
-        <svg viewBox={`0 0 ${SVG.w} ${SVG.h}`} width="100%" style={{ display: 'block' }}>
+      <Glass style={{ padding: `${CARD.padTop}px ${CARD.pad}px 36px` }}>
+        <svg viewBox={`0 0 ${SVG.w} ${SVG.h}`} width="100%" style={{ display: 'block', overflow: 'visible' }}>
+          {[80, 160, 240].map((gy) => <line key={gy} x1="20" y1={gy} x2="740" y2={gy} stroke={C.ice} strokeWidth="2" />)}
           <line x1="20" y1="320" x2="740" y2="320" stroke={C.ice} strokeWidth="3" />
-          <polyline points={PTS.map((p) => p.join(',')).join(' ')} fill="none" stroke={C.ube} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} />
+          <polyline points={potential} fill="none" stroke={C.green} strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} opacity="0.38" style={{ filter: 'blur(9px)' }} />
+          <polyline points={potential} fill="none" stroke={C.green} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} />
           <polyline points="20,300 200,296 400,288 580,290 740,282" fill="none" stroke={C.muted} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={L} strokeDashoffset={off} />
-          <circle cx="740" cy="38" r={11 * dot} fill={C.ube} />
+          <circle cx="740" cy="38" r={11 * dot} fill={C.green} />
           <circle cx="740" cy="282" r={11 * dot} fill={C.muted} />
         </svg>
         <img src={A.rocketMan} alt="" style={{ position: 'absolute', left: rx, top: ry, width: RWpx, height: RHpx, opacity: rocketOp, pointerEvents: 'none' }} />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20, fontFamily: FONT.display, fontWeight: 700, fontSize: 24, letterSpacing: TRACK.wide }}>
-          <span style={{ color: C.ube }}>● POTENTIAL</span>
+          <span style={{ color: C.navy }}><span style={{ color: C.green }}>●</span> POTENTIAL</span>
           <span style={{ color: C.muted }}>● WHAT YOU SHIP</span>
         </div>
-      </div>
+      </Glass>
     </Rise>
+    </Pose>
+    </React.Fragment>
   );
 }
 

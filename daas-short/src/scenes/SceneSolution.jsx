@@ -1,21 +1,35 @@
-/* Scene 5 — The solution (27–39s). Deep Space Blue sky, cloud band at the
-   foot. The rocket mark BLASTS out of the clouds one third in from the left,
-   arcs to the top center leaning into its velocity and lands on `settle`
-   (Expressive's one sanctioned overshoot on a mark); the flame outline draws
-   on at 40% of the flight and the boost swells from the nozzle on `spring`.
-   "DaaS" springs in as display type with a slow shimmer; "Design as a
-   Service" lands word by word once the mark has settled; six glass cards
-   stagger in; the service marquee runs last. */
+/* Scene 5 — The solution (27–35s). Deep Space Blue sky, open at the top (the
+   cloud ceiling is gone), cloud band at the foot. The rocket mark BLASTS out
+   of the clouds one third in from the left, arcs to the top center leaning
+   into its velocity and lands on `settle` (Expressive's one sanctioned
+   overshoot on a mark); the flame outline draws on at 40% of the flight and
+   the boost swells from the nozzle on `spring`. "DaaS" springs in as display
+   type with a slow shimmer; "Design as a Service" lands word by word once the
+   mark has settled. Then the six feature cards — navy glass in the reference's
+   floating 12° pose over two soft glows — land ONE AT A TIME: each starts as
+   the one before it lands (T.enter apart), and its icon tile pops on `launch`
+   over `fast` the moment the card is down. The service marquee runs last.
+   Cut from 12s to 8s so the scene moves on. */
 import React from 'react';
 import { useLocal, useTime } from '../engine/timeline.jsx';
-import { Scene, DarkBg, Eyebrow, Rise, WordRise, Mark, glassDark } from '../motion/moves.jsx';
-import { T, D, E, delay, prog, clamp01 } from '../motion/tokens.js';
+import { Scene, DarkBg, Eyebrow, Rise, WordRise, Mark, Glass, Glow, Pose, IconTile } from '../motion/moves.jsx';
+import { T, D, E, prog, clamp01 } from '../motion/tokens.js';
 import { C, FONT } from '../brand/palette.js';
 import { SCENE } from './plan.js';
 
-const B = { blast: 0, eyebrow: 0.2, daas: 0.3, tagline: 1.2, grid: 2.2, marquee: 3.4 };
+const B = { blast: 0, eyebrow: 0.2, daas: 0.3, tagline: 1.2, cards: 2.0 };
+const cardAt = (i) => B.cards + i * T.enter;        // one at a time: card i starts as card i-1 lands
+const iconAt = (i) => cardAt(i) + T.enter;          // the tile pops once its card is down
+B.marquee = iconAt(5);                              // 5.28 — after the last card has landed
 
-const FEATURES = ['One intelligent platform', 'AI-accelerated workflow', 'Human creative direction', 'Client portal + asset hub', 'No hourly overages', 'Simplified billing'];
+const FEATURES = [
+  { l1: 'One intelligent', l2: 'platform', icon: 'layers' },
+  { l1: 'AI-accelerated', l2: 'workflow', icon: 'sparkles' },
+  { l1: 'Human creative', l2: 'direction', icon: 'pen' },
+  { l1: 'Client portal', l2: '+ asset hub', icon: 'grid' },
+  { l1: 'No hourly', l2: 'overages', icon: 'clock' },
+  { l1: 'Simplified', l2: 'billing', icon: 'receipt' },
+];
 const SERVICES = ['Presentation design', 'Email campaigns', 'Infographics', 'Social media content', 'Video editing', 'E-learning content', 'Explainer videos', 'Interactive SOPs'];
 
 /* The blast-off. Flight over `reveal` (1.04s): y on settle (fast start,
@@ -82,24 +96,32 @@ function BigWord({ at }) {
   );
 }
 
-function FeatureGrid({ at }) {
+/* The feature field: a 2 x 3 grid of navy glass cards on one posed plane
+   (the reference's tilted glass), each with a lit icon tile and a two-line
+   label. Cards land one at a time on the Launch Rise (glide, rise-40). */
+const COL_W = 400, ROW_H = 128, GAP = 24, GRID_W = COL_W * 2 + GAP, GRID_H = ROW_H * 3 + GAP * 2;
+const GX = 540 - GRID_W / 2, GY = 850, PAD = 60; // PAD: room around the grid for the pose
+
+function FeatureField() {
   const { t } = useLocal();
   return (
-    <div style={{ position: 'absolute', left: 540, top: 940, width: 880, transform: 'translateX(-50%)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
-      {FEATURES.map((it, i) => {
-        const u = clamp01((t - at - delay(i)) / T.enter);
+    <Pose layer="front" x={GX - PAD} y={GY - PAD} w={GRID_W + PAD * 2} h={GRID_H + PAD * 2}>
+      {FEATURES.map((f, i) => {
+        const col = i % 2, row = Math.floor(i / 2);
+        const u = clamp01((t - cardAt(i)) / T.enter);
         return (
-          <div key={i} style={{
-            ...glassDark, transform: `translateY(${(1 - E.glide(u)) * D.rise}px)`, opacity: E.glide(u),
-            display: 'flex', alignItems: 'center', gap: 16, padding: '20px 22px', minHeight: 84,
-            fontFamily: FONT.display, fontWeight: 600, fontSize: 28, color: C.cream, lineHeight: 1.12,
-          }}>
-            <span style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 6, background: C.green }} />
-            {it}
+          <div key={i} style={{ position: 'absolute', left: PAD + col * (COL_W + GAP), top: PAD + row * (ROW_H + GAP), width: COL_W, height: ROW_H, transform: `translateY(${(1 - E.glide(u)) * D.rise}px)`, opacity: E.glide(u) }}>
+            <Glass dark style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', gap: 18, padding: '0 22px' }}>
+              <IconTile name={f.icon} at={iconAt(i)} />
+              <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 27, lineHeight: 1.14, color: C.cream, letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
+                <div>{f.l1}</div>
+                <div>{f.l2}</div>
+              </div>
+            </Glass>
           </div>
         );
       })}
-    </div>
+    </Pose>
   );
 }
 
@@ -111,7 +133,7 @@ function Marquee({ at }) {
   const line = SERVICES.join('   •   ');
   const full = (line + '   •   ').repeat(2);
   return (
-    <div style={{ position: 'absolute', left: 0, top: 1440, width: 1080, overflow: 'hidden', opacity: op, WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)', maskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)' }}>
+    <div style={{ position: 'absolute', left: 0, top: 1400, width: 1080, overflow: 'hidden', opacity: op, WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)', maskImage: 'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)' }}>
       <div style={{ display: 'inline-flex', whiteSpace: 'nowrap', transform: `translateX(${x}px)`, fontFamily: FONT.display, fontWeight: 500, fontSize: 30, color: 'rgba(248,248,243,0.94)', letterSpacing: '0.02em' }}>
         <span style={{ paddingLeft: 24 }}>{full}</span>
       </div>
@@ -122,12 +144,15 @@ function Marquee({ at }) {
 export default function SceneSolution() {
   const { start, end } = SCENE.solution;
   return (
-    <Scene start={start} end={end} bg={<DarkBg ceiling footer seed={5} />}>
+    <Scene start={start} end={end} bg={<DarkBg footer seed={5} />}>
       <Blast at={B.blast} />
       <Eyebrow at={B.eyebrow} y={432} text="The solution" color={C.green} />
       <BigWord at={B.daas} />
       <WordRise at={B.tagline} y={715} segs={['Design as a Service']} size={72} weight={700} color={C.cream} w={1000} />
-      <FeatureGrid at={B.grid} />
+      {/* The soft gradient the glass floats over: two orbs behind the field, Nebula Blue and Royal Dark Ube. */}
+      <Glow at={B.cards} x={330} y={980} r={330} color={C.nebula} alpha={0.30} />
+      <Glow at={B.cards} x={800} y={1190} r={340} color={C.ube} alpha={0.30} />
+      <FeatureField />
       <Marquee at={B.marquee} />
     </Scene>
   );

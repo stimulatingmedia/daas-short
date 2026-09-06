@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Stimulating Media — DaaS social short (9:16, 59s). Time-driven React scene graph on the SM motion design system, rendered to MP4 headlessly.",
+  "description": "Stimulating Media — DaaS social short (9:16, 55s). Time-driven React scene graph on the SM motion design system, rendered to MP4 headlessly.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

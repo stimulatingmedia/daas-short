@@ -8,7 +8,7 @@
    Times are converted to SECONDS because the timeline engine runs in s. */
 import {
   easing, duration, distance, stagger as staggerTok, scale as scaleTok,
-  applyProfile, exitDuration, fps as FPS_TOKEN,
+  applyProfile, exitDuration, fps as FPS_TOKEN, depth as depthTok, depthField as depthFieldTok, glass as glassTok,
 } from '../../vendor/sm-motion/tokens/motion.js';
 import { bezier } from './bezier.js';
 
@@ -46,6 +46,23 @@ export const D = {
 };
 
 export const SCALE = { press: scaleTok.press, from: scaleTok.from, drag: scaleTok.drag, settle: scaleTok.settle };
+
+/* Depth Field (the reference's floating glass world) in the Expressive profile:
+   a STATIC pose, never a wobble. The front layer carries the full tilt, the
+   middle three quarters, the back half; blur is a depth cue on far layers only. */
+export const DEPTH = {
+  perspective: depthTok.perspective,                       // 1200
+  tilt: depthFieldTok.byProfile[PROFILE].tiltDeg,          // 12
+  blurBack: depthFieldTok.byProfile[PROFILE].blurBackPx,   // 10
+  blurMid: depthFieldTok.byProfile[PROFILE].blurMidPx,     // 3
+  scaleBack: depthFieldTok.scaleBack,                      // 1.12
+  scaleMid: depthFieldTok.scaleMid,                        // 1.04
+  drift: depthFieldTok.driftPx,                            // 12
+  rate: { back: 0.5, mid: 0.75, front: 1 },                // tilt rate by layer (sm-motion.css §20)
+};
+
+/* Glass surface material: frost 16px, 62% white (light) — navy glass runs 72%. */
+export const GLASS = { blur: glassTok.blurPx, alpha: glassTok.alpha, alphaDark: 0.72 };
 
 /* Stagger (s). One cadence per scene; every delay capped at 400ms with min(). */
 export const CADENCE = { tight: staggerTok.tight / 1000, base: staggerTok.base / 1000, wide: staggerTok.wide / 1000 };
