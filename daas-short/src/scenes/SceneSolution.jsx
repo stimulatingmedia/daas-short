@@ -28,7 +28,7 @@ B.marquee = cardAt(5) + T.enter;                    // 4.546 — after the last 
 const FEATURES = [
   { l1: 'One intelligent', l2: 'platform', icon: 'layers' },
   { l1: 'AI-accelerated', l2: 'workflow', icon: 'sparkles' },
-  { l1: 'Human creative', l2: 'direction', icon: 'pen' },
+  { l1: 'Human creative', l2: 'direction', icon: 'person' },
   { l1: 'Client portal', l2: '+ asset hub', icon: 'grid' },
   { l1: 'No hourly', l2: 'overages', icon: 'clock' },
   { l1: 'Simplified', l2: 'billing', icon: 'receipt' },
@@ -128,10 +128,12 @@ function FeatureField() {
   );
 }
 
-/* Reading-order horizontal motion on `linear`: the one loop in the piece, and it is the content, not behind it. */
-function Marquee({ at }) {
+/* Reading-order horizontal motion on `linear`: the one loop in the piece, and
+   it is the content, not behind it. It fades out before `until` so the cloud
+   band never slices a line of text that is still moving. */
+function Marquee({ at, until }) {
   const { t } = useLocal();
-  const op = E.standard(clamp01((t - at) / T.base));
+  const op = E.standard(clamp01((t - at) / T.base)) * (1 - E.standard(clamp01((t - until) / T.base)));
   const x = -Math.max(0, t - at) * 80;
   const line = SERVICES.join('   •   ');
   const full = (line + '   •   ').repeat(2);
@@ -156,7 +158,7 @@ export default function SceneSolution() {
       <Glow at={B.cards} x={330} y={980} r={330} color={C.nebula} alpha={0.30} />
       <Glow at={B.cards} x={800} y={1190} r={340} color={C.ube} alpha={0.30} />
       <FeatureField />
-      <Marquee at={B.marquee} />
+      <Marquee at={B.marquee} until={SCENE.solution.end - SCENE.solution.start - T.reveal * 0.75} />
     </Scene>
   );
 }

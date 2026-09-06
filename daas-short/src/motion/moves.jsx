@@ -377,7 +377,8 @@ export const glassLight = {
 };
 export const glassDark = {
   background: tint(C.navy, GLASS.alphaDark),
-  border: `1px solid ${tint(C.ice, 0.22)}`,
+  // 0.28, not the page-scale 0.22: at 1080 wide on a phone the 0.22 hairline vanishes against the sky.
+  border: `1px solid ${tint(C.ice, 0.28)}`,
   boxShadow: `0 18px 48px ${tint(C.navy, 0.28)}, inset 0 1px 0 ${tint(C.ice, 0.18)}`,
   backdropFilter: frost, WebkitBackdropFilter: frost,
   borderRadius: RADIUS.lg, color: C.white,
@@ -385,9 +386,12 @@ export const glassDark = {
 /* Capsules: the same material at pill radius (role chips, task pills, the URL). */
 export const glassPill = { ...glassLight, borderRadius: RADIUS.pill };
 export const glassPillDark = { ...glassDark, borderRadius: RADIUS.pill };
+/* The reference's "faint brighter inner highlight along the top edge": a
+   vertical lift, not a diagonal gloss (a 155° sweep puts a hotspot in the
+   middle of a card and reads as varnish). */
 const SHEEN = {
-  light: 'linear-gradient(155deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.18) 38%, rgba(255,255,255,0) 62%)',
-  dark: `linear-gradient(155deg, ${tint(C.ice, 0.16)} 0%, ${tint(C.ice, 0.05)} 40%, ${tint(C.ice, 0)} 65%)`,
+  light: 'linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0) 42%)',
+  dark: `linear-gradient(180deg, ${tint(C.ice, 0.10)} 0%, ${tint(C.ice, 0)} 40%)`,
 };
 export function Glass({ dark = false, pill = false, sheen = true, style, children }) {
   const base = dark ? (pill ? glassPillDark : glassDark) : (pill ? glassPill : glassLight);
@@ -422,20 +426,36 @@ export function Glow({ at = 0, x, y, r = 300, color = C.nebula, alpha = 0.32 }) 
    perspective. `layer` scales the tilt (front 1, mid 0.75, back 0.5) and, for
    the far layers, adds the depth cues: larger, dimmer, blurred. Copy stays on
    the front layer, so blur never touches text being read. A pose, never a wobble. */
-export function Pose({ layer = 'front', x = 0, y = 0, w = 1080, h = 1920, origin = '50% 50%', style, children }) {
-  const rate = DEPTH.rate[layer] ?? 1;
+export function Pose({ layer = 'front', axes = 'xy', rate: rateProp, x = 0, y = 0, w = 1080, h = 1920, origin = '50% 50%', style, children }) {
+  const rate = rateProp ?? DEPTH.rate[layer] ?? 1;
   const far = layer !== 'front';
   const scale = layer === 'back' ? DEPTH.scaleBack : layer === 'mid' ? DEPTH.scaleMid : 1;
   const blur = layer === 'back' ? DEPTH.blurBack : layer === 'mid' ? DEPTH.blurMid : 0;
+  // axes='x' keeps every baseline level: the right choice over a tall column of
+  // statements, where a two-axis keystone is the most visible tilt artifact.
+  const ry = axes === 'xy' ? -DEPTH.tilt * rate : 0;
   return (
     <div style={{ position: 'absolute', left: x, top: y, width: w, height: h, perspective: DEPTH.perspective, perspectiveOrigin: origin, pointerEvents: 'none', ...style }}>
       <div style={{
         position: 'absolute', inset: 0, transformOrigin: origin,
-        transform: `scale(${scale}) rotateX(${DEPTH.tilt * rate}deg) rotateY(${-DEPTH.tilt * rate}deg)`,
+        transform: `scale(${scale}) rotateX(${DEPTH.tilt * rate}deg) rotateY(${ry}deg)`,
         filter: far && blur ? `blur(${blur}px)` : 'none', opacity: layer === 'back' ? 0.75 : 1,
       }}>{children}</div>
     </div>
   );
+}
+/* Where a point of a posed plane lands on screen. CSS applies `rotateX(a)
+   rotateY(b)` right to left, so the point goes through Ry then Rx, then the
+   perspective divide. Screen-space annotations (the marker connectors) aim at
+   project(...) instead of the flat coordinate. */
+export function project(px, py, { cx, cy, rate = 1, axes = 'xy' }) {
+  const a = (DEPTH.tilt * rate * Math.PI) / 180;
+  const b = (axes === 'xy' ? -DEPTH.tilt * rate : 0) * (Math.PI / 180);
+  const u = px - cx, v = py - cy;
+  const x1 = u * Math.cos(b), z1 = -u * Math.sin(b);
+  const y2 = v * Math.cos(a) - z1 * Math.sin(a), z2 = v * Math.sin(a) + z1 * Math.cos(a);
+  const s = DEPTH.perspective / (DEPTH.perspective - z2);
+  return { x: cx + x1 * s, y: cy + y2 * s, s };
 }
 
 /* ── Icon tile + glyph ──────────────────────────────────────────────────────
@@ -451,20 +471,21 @@ export function Glyph({ name, size = 30, color = C.navy, stroke = 2.2 }) {
     </svg>
   );
 }
-export function IconTile({ name, at, size = 56, radius = 16, tone = 'nebula', style }) {
+export function IconTile({ name, at, size = 56, radius = 18, tone = 'nebula', style }) {
   const { t } = useLocal();
   const pop = at == null ? 1 : E.launch(clamp01((t - at) / T.fast));
-  const lit = tone === 'nebula';
-  const bg = lit ? tint(C.nebula, 0.16) : tone === 'green' ? tint(C.green, 0.16) : tone === 'ube' ? tint(C.ube, 0.12) : tint(C.navy, 0.06);
-  const edge = lit ? tint(C.nebula, 0.42) : tone === 'green' ? tint(C.green, 0.5) : tone === 'ube' ? tint(C.ube, 0.35) : tint(C.navy, 0.14);
-  const ink = lit ? C.nebula : tone === 'green' ? C.green : tone === 'ube' ? C.ube : C.navy;
+  // Solid fills, navy glyph: the reference's tiles are solid, and a tinted fill
+  // disappears on navy glass at phone scale. Navy on Nebula measures ~9:1.
+  const bg = tone === 'green' ? C.green : tone === 'ube' ? C.ube : C.nebula;
+  const ink = tone === 'ube' ? C.white : C.navy;
   return (
     <div style={{
-      flex: 'none', width: size, height: size, borderRadius: radius, background: bg, border: `1px solid ${edge}`,
+      flex: 'none', width: size, height: size, borderRadius: radius, background: bg,
+      boxShadow: `0 8px 24px ${tint(C.navy, 0.10)}, inset 0 1px 0 rgba(255,255,255,0.35)`,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       transform: `scale(${0.6 + 0.4 * pop})`, opacity: pop, ...style,
     }}>
-      <Glyph name={name} size={Math.round(size * 0.52)} color={ink} />
+      <Glyph name={name} size={Math.round(size * 0.57)} color={ink} />
     </div>
   );
 }

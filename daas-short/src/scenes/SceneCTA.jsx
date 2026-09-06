@@ -1,4 +1,4 @@
-/* Scene 7 — End card (50–59s). Deep Space Blue, cloud band at the foot,
+/* Scene 7 — End card (46–55s). Deep Space Blue, cloud band at the foot,
    sparkles at rest (nothing twinkles on an end card). The Rocket Sting plays
    once: mark rises on settle, flame draws, boost swells, wordmark wipes. The
    closing line lands word by word in the three phrases Ben asked for, with a

@@ -77,7 +77,7 @@ daas-short/
 ## Render options
 
 ```sh
-node scripts/render.mjs --start 27 --end 39          # one scene
+node scripts/render.mjs --start 27 --end 35          # one scene
 node scripts/render.mjs --crf 16 --out out/master.mp4
 node scripts/keyframes.mjs --times 0,3.2,6.5 --full  # specific frames, full size in out/frames/
 node scripts/keyframes.mjs --dist dist-qa --port 4310 # build/serve a private copy (several QA runs can share one checkout)

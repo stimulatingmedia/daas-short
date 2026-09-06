@@ -25,7 +25,7 @@ const TASKS = [
   { x: 335, y: 655, text: 'Polish presentation deck', color: C.ube, rot: -9 },
   { x: 745, y: 685, text: 'New banner for website', color: C.nebula, rot: 3 },
   { x: 300, y: 965, text: 'Infographics', color: C.green, rot: 4 },
-  { x: 760, y: 1075, text: 'Graphics for social post', color: C.orange, rot: -3 },
+  { x: 700, y: 1075, text: 'Graphics for social post', color: C.orange, rot: -3 },
   { x: 435, y: 1255, text: 'Video for pitch deck', color: C.ube, rot: -5 },
 ];
 
@@ -44,7 +44,9 @@ function TaskCloud({ at }) {
         transform: `translate(-50%,-50%) translateY(${(1 - E.glide(u)) * D.rise}px) rotate(${k.rot}deg)`,
         opacity: E.glide(u),
       }}>
-        <Glass pill style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 28px 16px 22px', whiteSpace: 'nowrap', boxShadow: '0 18px 44px rgba(6,49,65,0.20), inset 0 1px 0 rgba(255,255,255,0.8)' }}>
+        {/* 0.78 rather than the 0.62 page value: these pills frost a photograph,
+            and at 0.62 the navy label drops to about 5.5:1 over her laptop. */}
+        <Glass pill style={{ background: 'rgba(255,255,255,0.78)', display: 'flex', alignItems: 'center', gap: 16, padding: '16px 28px 16px 22px', whiteSpace: 'nowrap', boxShadow: '0 18px 44px rgba(6,49,65,0.20), inset 0 1px 0 rgba(255,255,255,0.8)' }}>
           <span style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 6, background: k.color }} />
           <span style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 30, color: C.navy }}>{k.text}</span>
         </Glass>

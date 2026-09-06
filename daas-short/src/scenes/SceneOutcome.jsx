@@ -1,4 +1,4 @@
-/* Scene 6 — The outcome (39–50s). Galaxy White. Headline, then six PAIN
+/* Scene 6 — The outcome (35–46s). Galaxy White. Headline, then six PAIN
    cards stagger in (no checks yet). After ~2.5s of reading time the caped
    hero blasts up from below the frame on `settle` (one overshoot, a mark/prop
    landing), Cosmic Orange + Stimulating Green streaks trailing with his
@@ -24,10 +24,19 @@ const OUTCOMES = [
   { pain: 'Files scattered everywhere', win: 'Brand assets in one place' },
   { pain: 'Off-brand, inconsistent', win: 'Total brand consistency' },
 ];
-const COL_W = 426, ROW_H = 312, GAP = 28, GX = 100, GY = 710;
+/* Geometry is sized so the posed grid clears both platform overlays: the bottom
+   row's copy stays above the caption stack (y 1536) and the right column's copy
+   inside the action column (x 930). */
+const COL_W = 396, ROW_H = 264, GAP = 20, GX = 122, GY = 700;
 const GRID_CX = GX + COL_W + GAP / 2, GRID_CY = GY + (ROW_H * 3 + GAP * 2) / 2; // the pose pivots on the grid's center
+/* Six stacked statements are a reading column, so this plane tilts on X only —
+   level baselines, no keystone — and at the mid rate (9°), which keeps the top
+   row's caption above the 24px floor. */
+const POSE = { axes: 'x', rate: 0.75 };
 const IMGW = 360, IMGH = IMGW * (712 / 720), FEET = 0.913;
-const START_TOP = 1660, SETTLE_TOP = 432 - FEET * IMGH;
+/* He lands just above the eyebrow, not on it: at the old 432 his cape hung over
+   the last letters of "THE OUTCOME". */
+const START_TOP = 1660, SETTLE_TOP = 398 - FEET * IMGH;
 const feetY = (u) => START_TOP + (SETTLE_TOP - START_TOP) * E.settle(u) + FEET * IMGH;
 
 /* Flip a row as the hero's feet pass its center: solve the flight curve for
@@ -58,8 +67,8 @@ function OutcomeGrid({ cardsAt, heroAt }) {
   return (
     <React.Fragment>
       <Glow at={cardsAt} x={380} y={960} r={380} color={C.nebula} alpha={0.20} />
-      <Glow at={cardsAt} x={740} y={1440} r={380} color={C.ube} alpha={0.16} />
-      <Pose origin={`${GRID_CX}px ${GRID_CY}px`}>
+      <Glow at={cardsAt} x={740} y={1400} r={360} color={C.ube} alpha={0.16} />
+      <Pose {...POSE} origin={`${GRID_CX}px ${GRID_CY}px`}>
       {OUTCOMES.map((o, i) => {
         const col = i % 2, row = Math.floor(i / 2);
         const left = GX + col * (COL_W + GAP), top = GY + row * (ROW_H + GAP);
@@ -73,19 +82,20 @@ function OutcomeGrid({ cardsAt, heroAt }) {
         return (
           <div key={i} style={{ position: 'absolute', left, top, width: COL_W, height: ROW_H, opacity: painIn }}>
             <div style={{ width: '100%', height: '100%', transformOrigin: 'center center', transform: `translateY(${(1 - painIn) * D.rise}px) scaleY(${Math.max(0.001, sy)})` }}>
-              <Glass style={{ width: '100%', height: '100%', borderRadius: 26, padding: '34px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 18, boxSizing: 'border-box' }}>
+              <Glass style={{ width: '100%', height: '100%', borderRadius: 26, padding: '26px 26px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 14, boxSizing: 'border-box' }}>
                 {showWin ? (
                   <React.Fragment>
-                    <div style={{ flex: 'none', width: 64, height: 64, borderRadius: 18, background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 10px 24px rgba(6,49,65,0.14)', transform: `scale(${0.6 + 0.4 * check})`, opacity: check }}>
-                      <Glyph name="check" size={34} color={C.navy} stroke={3.2} />
+                    {/* The reference's solid rounded-square tile, popping on launch over fast. */}
+                    <div style={{ flex: 'none', width: 56, height: 56, borderRadius: 18, background: C.green, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 24px rgba(6,49,65,0.10), inset 0 1px 0 rgba(255,255,255,0.35)', transform: `scale(${0.6 + 0.4 * check})`, opacity: check }}>
+                      <Glyph name="check" size={32} color={C.navy} stroke={3.2} />
                     </div>
-                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 38, color: C.navy, lineHeight: 1.08 }}>{o.win}</div>
-                    <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 24, color: C.muted, textDecoration: 'line-through', textDecorationColor: C.nebula, opacity: 0.85 }}>{o.pain}</div>
+                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy, lineHeight: 1.08 }}>{o.win}</div>
+                    <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 26, color: C.muted, textDecoration: 'line-through', textDecorationColor: C.nebula, opacity: 0.85 }}>{o.pain}</div>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
-                    <div style={{ flex: 'none', width: 64, height: 64, borderRadius: 18, border: `4px solid ${C.nebula}`, opacity: 0.55 }} />
-                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 38, color: C.navy, lineHeight: 1.08 }}>{o.pain}</div>
+                    <div style={{ flex: 'none', width: 56, height: 56, borderRadius: 18, border: `4px solid ${C.nebula}`, opacity: 0.55 }} />
+                    <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 36, color: C.navy, lineHeight: 1.08 }}>{o.pain}</div>
                   </React.Fragment>
                 )}
               </Glass>
