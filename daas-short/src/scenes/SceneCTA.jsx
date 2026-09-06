@@ -6,9 +6,8 @@
    shifts. Then the URL pill rises and the marker aside draws its arrow to it.
    Fully static for the last 2.3s: loop-safe. */
 import React from 'react';
-import { useLocal } from '../engine/timeline.jsx';
 import { Scene, DarkBg, Sting, WordRise, wordRiseLanding, Rise, Marker, Connector, Sparkles, Glyph } from '../motion/moves.jsx';
-import { T, E, clamp01 } from '../motion/tokens.js';
+import { T } from '../motion/tokens.js';
 import { C, FONT, SHADOW } from '../brand/palette.js';
 import { SCENE } from './plan.js';
 

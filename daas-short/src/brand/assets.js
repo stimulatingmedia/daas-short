@@ -10,7 +10,6 @@ export const A = {
   jumpGraph: asset('jump-graph.webp'),     // S3 — man leaping the orange bar chart
   rocketMan: asset('rocket-man.webp'),     // S4 — rides the potential line (cut-out)
   capeMan: asset('cape-man.webp'),         // S6 — the hero (cut-out)
-  cloudsNavy: asset('clouds-navy.webp'),   // S5 — Deep Space Blue cloud band, flipped into the ceiling
   cloudFooter: asset('cloud-footer.svg'),  // S5/S7 — the brand's scalloped cloud band (Galaxy White)
 };
 export const ALL_ASSETS = Object.values(A);

@@ -7,7 +7,7 @@ import React from 'react';
 import { useLocal, useTime } from '../engine/timeline.jsx';
 import { Scene, Fill, Eyebrow, Kinetic, Rise, Marker, Connector, Glass, bob } from '../motion/moves.jsx';
 import { T, D, E, delay, clamp01 } from '../motion/tokens.js';
-import { C, ILLO, FONT, RADIUS } from '../brand/palette.js';
+import { C, ILLO, FONT } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
 import { SCENE } from './plan.js';
 

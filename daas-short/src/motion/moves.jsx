@@ -6,7 +6,7 @@
    exact. Spec: github.com/stimulatingmedia/motiondesign/MOTION-SPEC.md */
 import React from 'react';
 import { Sprite, useLocal, useTime } from '../engine/timeline.jsx';
-import { T, D, E, SCALE, DEPTH, GLASS, delay, prog, lin, clamp01 } from './tokens.js';
+import { T, D, E, DEPTH, GLASS, delay, prog, clamp01 } from './tokens.js';
 import { C, FONT, TRACK, RADIUS, SHADOW } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
 import { GLYPH } from '../brand/glyphs.js';
@@ -246,9 +246,10 @@ export function Sparkles({ at = 0, nodes, color = C.ube50, seed = 0, twinkle = t
 
 /* ── Deep Space Blue backdrop ───────────────────────────────────────────────
    gradient-sky as a radial, a static starfield (three stars twinkle slowly),
-   the dark cloud ceiling, and the brand's scalloped cloud band resting at the
-   bottom of the frame: whatever sits above it is already in flight. */
-export function DarkBg({ ceiling = false, footer = true, stars = 56, seed = 0 }) {
+   and the brand's scalloped cloud band resting at the bottom of the frame:
+   whatever sits above it is already in flight. The sky is open at the top
+   (the spec's clouds are the footer of the sky, never a ceiling). */
+export function DarkBg({ footer = true, stars = 56, seed = 0 }) {
   const time = useTime();
   const pts = [];
   for (let i = 0; i < stars; i++) {
@@ -261,8 +262,6 @@ export function DarkBg({ ceiling = false, footer = true, stars = 56, seed = 0 })
     <div style={{ position: 'absolute', inset: 0 }}>
       <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(125% 75% at 50% 16%, ${C.sky3} 0%, ${C.sky2} 46%, ${C.sky1} 100%)` }} />
       <svg viewBox="0 0 1080 1920" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>{pts}</svg>
-      {/* The ceiling: the brand's Deep Space Blue cloud band (a footer shape) flipped so its scallops hang ~150px into the frame. */}
-      {ceiling && <img src={A.cloudsNavy} alt="" style={{ position: 'absolute', top: -(838 - 150), left: 0, width: 1080, height: 838, transform: 'scaleY(-1)' }} />}
       {footer && <img src={A.cloudFooter} alt="" style={{ position: 'absolute', bottom: -2, left: 0, width: '100%' }} />}
     </div>
   );
@@ -386,10 +385,6 @@ export const glassDark = {
 /* Capsules: the same material at pill radius (role chips, task pills, the URL). */
 export const glassPill = { ...glassLight, borderRadius: RADIUS.pill };
 export const glassPillDark = { ...glassDark, borderRadius: RADIUS.pill };
-/* Kept for the collage scenes that have not moved to glass. */
-export const cardLight = {
-  background: C.paper, border: `1.5px solid ${C.ice}`, borderRadius: RADIUS.xl, boxShadow: SHADOW.lg,
-};
 const SHEEN = {
   light: 'linear-gradient(155deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.18) 38%, rgba(255,255,255,0) 62%)',
   dark: `linear-gradient(155deg, ${tint(C.ice, 0.16)} 0%, ${tint(C.ice, 0.05)} 40%, ${tint(C.ice, 0)} 65%)`,

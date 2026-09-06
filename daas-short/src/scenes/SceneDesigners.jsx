@@ -6,7 +6,7 @@
 import React from 'react';
 import { useLocal } from '../engine/timeline.jsx';
 import { Scene, Fill, Kinetic, Rise, Marker, Sparkles, Glass, Glow, Pose, fillProgress } from '../motion/moves.jsx';
-import { T, D, E, delay } from '../motion/tokens.js';
+import { D, E, delay } from '../motion/tokens.js';
 import { C, ILLO, FONT, TRACK } from '../brand/palette.js';
 import { A } from '../brand/assets.js';
 import { SCENE } from './plan.js';
@@ -27,7 +27,7 @@ function GainsLosses({ at, barsAt }) {
     <Pose origin="540px 790px">
     <Rise at={at} y={640} w={860}>
       <Glass style={{ padding: '30px 38px 34px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: FONT.display, fontWeight: 700, fontSize: 20, letterSpacing: TRACK.overline, marginBottom: 22 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: FONT.display, fontWeight: 700, fontSize: 24, letterSpacing: TRACK.overline, marginBottom: 22 }}>
           <span style={{ color: C.ube }}>◀ LOSS</span>
           <span style={{ color: C.navy }}>GAIN ▶</span>
         </div>

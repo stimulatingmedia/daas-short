@@ -80,7 +80,7 @@ function OutcomeGrid({ cardsAt, heroAt }) {
                       <Glyph name="check" size={34} color={C.navy} stroke={3.2} />
                     </div>
                     <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 38, color: C.navy, lineHeight: 1.08 }}>{o.win}</div>
-                    <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 22, color: C.muted, textDecoration: 'line-through', textDecorationColor: C.nebula, opacity: 0.85 }}>{o.pain}</div>
+                    <div style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 24, color: C.muted, textDecoration: 'line-through', textDecorationColor: C.nebula, opacity: 0.85 }}>{o.pain}</div>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>

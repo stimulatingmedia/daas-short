@@ -6,10 +6,13 @@
    the boost swells from the nozzle on `spring`. "DaaS" springs in as display
    type with a slow shimmer; "Design as a Service" lands word by word once the
    mark has settled. Then the six feature cards — navy glass in the reference's
-   floating 12° pose over two soft glows — land ONE AT A TIME: each starts as
-   the one before it lands (T.enter apart), and its icon tile pops on `launch`
-   over `fast` the moment the card is down. The service marquee runs last.
-   Cut from 12s to 8s so the scene moves on. */
+   floating 12° pose over two soft glows — land ONE AT A TIME on the 12-frame
+   beat grid: card i starts at 2.0 + i × T.beat (0.4s, so every start is a
+   whole frame), by which point the card before it is 97% of the way down; the
+   icon tile pops on `launch` over `fast` at 40% of its card's entrance
+   (container before content). Six beats, not a stagger: Ben asked for one at
+   a time. The service marquee (the one ambient loop) starts only after the
+   last card has landed. Cut from 12s to 8s so the scene moves on. */
 import React from 'react';
 import { useLocal, useTime } from '../engine/timeline.jsx';
 import { Scene, DarkBg, Eyebrow, Rise, WordRise, Mark, Glass, Glow, Pose, IconTile } from '../motion/moves.jsx';
@@ -18,9 +21,9 @@ import { C, FONT } from '../brand/palette.js';
 import { SCENE } from './plan.js';
 
 const B = { blast: 0, eyebrow: 0.2, daas: 0.3, tagline: 1.2, cards: 2.0 };
-const cardAt = (i) => B.cards + i * T.enter;        // one at a time: card i starts as card i-1 lands
-const iconAt = (i) => cardAt(i) + T.enter;          // the tile pops once its card is down
-B.marquee = iconAt(5);                              // 5.28 — after the last card has landed
+const cardAt = (i) => B.cards + i * T.beat;         // one per beat: 2.0, 2.4, 2.8, 3.2, 3.6, 4.0
+const iconAt = (i) => cardAt(i) + T.enter * 0.4;    // the tile pops at 40% of its card's entrance
+B.marquee = cardAt(5) + T.enter;                    // 4.546 — after the last card has landed
 
 const FEATURES = [
   { l1: 'One intelligent', l2: 'platform', icon: 'layers' },

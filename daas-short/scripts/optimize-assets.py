@@ -24,7 +24,6 @@ PLAN = {
 }
 VENDOR = ROOT / 'vendor' / 'sm-motion' / 'assets'
 VENDOR_PLAN = {
-    'clouds-navy': ('clouds-navy.png', 1080, 838, 90),   # S5 ceiling: the brand cloud band recolored Deep Space Blue
 }
 COPY = ['cloud-footer.svg']  # vector, copied as-is from the motion system vendor dir
 

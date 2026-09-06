@@ -29,12 +29,14 @@ const B = {
 };
 
 /* Role chips: light glass capsules on the reference's floating pose, over a
-   soft Nebula glow so the frost has something to sample. Prices stay flat type. */
+   soft glow so the frost has something to sample — light Royal Dark Ube here,
+   because Nebula Blue goes grey-green on the greige collage ground and the
+   lavender sits with the ube eyebrow and total. */
 function ChipCluster({ at, y }) {
   const { t } = useLocal();
   return (
     <React.Fragment>
-      <Glow at={at} x={540} y={y + 90} r={380} color={C.nebula} alpha={0.22} />
+      <Glow at={at} x={540} y={y + 90} r={380} color={C.ube50} alpha={0.20} />
       <Pose origin={`540px ${y + 90}px`}>
         <div style={{ position: 'absolute', left: 540, top: y, width: 940, transform: 'translateX(-50%)', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '26px 18px' }}>
           {ROLES.map((c, i) => {
